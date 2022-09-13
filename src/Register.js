@@ -48,11 +48,23 @@ function Register() {
         setErrMsg("");
     }, [user, pwd, matchPwd]);
 
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        //if button enabled with JS hack
+        const v1 = USER_REGEX.test(user);
+        const v2 = PWD_REGEX.test(pwd);
+        if (!v1 || !v2) {
+            setErrMsg("invalid entry");
+            return;
+        }
+    }
+
     return (
         <section>
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <h1>Register</h1>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <label htmlFor="username">
                     Username:
                     <span className={validName ? "valid" : "hide"}>
@@ -103,9 +115,45 @@ function Register() {
                 <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
                     <FontAwesomeIcon icon={faInfoCircle} />
                     8 to 24 characters.<br />
-                    Must include uppercase and lowercase letters and a number.
+                    Must include uppercase and lowercase letters.
+                    Must include at least one number.
                 </p>
+
+                <label htmlFor="confirm_pwd">
+                    Confirm Password:
+                    <span className={validMatch && matchPwd ? "valid" : "hide"}>
+                        <FontAwesomeIcon icon={faCheck} />
+                    </span>
+                    <span className={validMatch || !matchPwd ? "hide" : "invalid"}>
+                        <FontAwesomeIcon icon={faTimes} />
+                    </span>
+                </label>
+                <input
+                    type="password"
+                    id="confirm_pwd"
+                    onChange={(e) => setMatchPwd(e.target.value)}
+                    required
+                    aria-invalid={validMatch ? "false" : "true"}
+                    aria-describedby="confirmnote"
+                    onFocus={() => setMatchFocus(true)}
+                    onBlur={() => setMatchFocus(false)}
+                />
+                <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    Must match the first password input field.
+                </p>
+
+                <button disabled={!validName || !validPwd || !validMatch ? true : false}>
+                    Sign Up
+                </button>
             </form>
+            <p>
+                Already registered?<br />
+                <span className="line">
+                    {/* Router link here */}
+                    <a href="#">Sign In</a>
+                </span>
+            </p>
         </section>
     )
 }
