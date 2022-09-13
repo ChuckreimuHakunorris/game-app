@@ -14,7 +14,7 @@ html {
 
 body {
     min-height: 100vh;
-    background-color: dodgerblue;
+    background-color: #163570;
 }
 
 .App {
@@ -35,6 +35,7 @@ section {
     justify-content: flex-start;
     padding: 1rem;
     background-color: rgba(0,0,0,0.4);
+    border-radius: 0.5rem;
 }
 
 form {
