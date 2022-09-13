@@ -58,6 +58,8 @@ function Register() {
             setErrMsg("invalid entry");
             return;
         }
+        console.log(user, pwd);
+        setSuccess(true);
     }
 
     return (
