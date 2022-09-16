@@ -39,12 +39,13 @@ const Login = () => {
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
 
-            setAuth({ user, pwd, roles, accessToken });
-
             setUser("");
             setPwd("");
             setSuccess(true);
+
+            setAuth({ user, pwd, roles, accessToken });
         } catch (err) {
+            
             if (err?.response?.status === 0) {
                 setErrMsg("No server response");
             } else if (err.response?.status === 400) {
