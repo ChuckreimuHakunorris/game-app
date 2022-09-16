@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect, useContext } from "react";
+import { useRef, useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 const LOGIN_URL = "/auth";
 
@@ -8,8 +8,6 @@ const Login = () => {
     const { setAuth } = useAuth();
 
     const navigate = useNavigate();
-    const location = useLocation();
-    const from = location.state?.from?.pathname || "/";
 
     const userRef = useRef();
     const errRef = useRef();
@@ -45,11 +43,11 @@ const Login = () => {
 
             setUser("");
             setPwd("");
-            setSuccess(true);
-
+            
             setAuth({ user, pwd, roles, accessToken });
 
-            navigate(from, { replace: true });
+            console.log("we got here");
+            navigate("/");
         } catch (err) {
 
             if (err?.response?.status === 0) {
@@ -96,8 +94,7 @@ const Login = () => {
             <p>
                 Need an Account?<br />
                 <span className="line">
-                    {/* Router link here */}
-                    <a href="#">Sign Up</a>
+                    <Link to="/register">Sign In</Link>
                 </span>
             </p>
         </section>

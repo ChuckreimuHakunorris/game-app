@@ -21,8 +21,10 @@ function App() {
                 <Route path="unauthorized" element={<Unauthorized />} />
 
                 {/* protected routes */}
-                <Route element={<RequireAuth />}>
+                <Route element={<RequireAuth allowedRoles={[1000]}/>}>
                     <Route path="/" element={<Home />} />
+                </Route>
+                <Route element={<RequireAuth allowedRoles={[9000]}/>}>
                     <Route path="admin" element={<Admin />} />
                 </Route>
                 {/* catch all */}
