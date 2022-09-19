@@ -45,8 +45,7 @@ const Login = () => {
             setPwd("");
             
             setAuth({ user, pwd, roles, accessToken });
-
-            console.log("we got here");
+            
             navigate("/");
         } catch (err) {
 
