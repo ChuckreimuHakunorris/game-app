@@ -14,7 +14,7 @@ const PersistLogin = () => {
                 await refresh();
             }
             catch (err) {
-                console.err(err);
+                console.error(err);
             }
             finally {
                 setIsLoading(false);
@@ -22,11 +22,15 @@ const PersistLogin = () => {
         }
 
         !auth?.accessToken ? verifyRefreshToken() : setIsLoading(false);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect (() => {
         console.log(`isLoading: ${isLoading}`);
         console.log(`aT: ${JSON.stringify(auth?.accessToken)}`);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoading])
 
     return (

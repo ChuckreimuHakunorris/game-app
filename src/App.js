@@ -8,6 +8,7 @@ import Admin from "./components/Admin";
 import LinkPage from "./components/LinkPage";
 
 import RequireAuth from "./components/RequireAuth";
+import PersistLogin from "./components/PersistLogin";
 import { Routes, Route } from "react-router-dom";
 
 function App() {
@@ -21,12 +22,16 @@ function App() {
                 <Route path="unauthorized" element={<Unauthorized />} />
 
                 {/* protected routes */}
-                <Route element={<RequireAuth allowedRoles={[1000]}/>}>
-                    <Route path="/" element={<Home />} />
+                <Route element={<PersistLogin />}>
+                    <Route element={<RequireAuth allowedRoles={[1000]} />}>
+                        <Route path="/" element={<Home />} />
+                    </Route>
+                    
+                    <Route element={<RequireAuth allowedRoles={[9000]} />}>
+                        <Route path="admin" element={<Admin />} />
+                    </Route>
                 </Route>
-                <Route element={<RequireAuth allowedRoles={[9000]}/>}>
-                    <Route path="admin" element={<Admin />} />
-                </Route>
+
                 {/* catch all */}
                 <Route path="*" element={<Missing />} />
             </Route>
