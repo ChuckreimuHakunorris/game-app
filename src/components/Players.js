@@ -17,9 +17,12 @@ const Players = () => {
                 const response = await axiosPrivate.get("/players", {
                     signal: controller.signal
                 });
+
+                const userNames = response.data.map(player => player.username);
+
                 console.log(response.data);
 
-                isMounted && setPlayers(response.data);
+                isMounted && setPlayers(userNames);
             } catch (err) {
                 console.error(err);
                 navigate("/login", { state: { from: location }, replace: true});
@@ -41,9 +44,9 @@ const Players = () => {
             <h2>Players List</h2>
             {players?.length
                 ? (
-                    <ul>
+                    <ul style={{ listStyle: "none" }}>
                         {players.map((player, i) => <li key={i}>
-                            {player?.username}
+                            {player}
                         </li>)}
                     </ul>
                 ) : <p>No players to display</p>
