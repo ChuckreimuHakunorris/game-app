@@ -5,6 +5,7 @@ import Layout from "./components/Layout";
 import Unauthorized from "./components/Unauthorized";
 import Missing from "./components/Missing";
 import Admin from "./components/Admin";
+import Game from "./components/Game";
 import LinkPage from "./components/LinkPage";
 
 import RequireAuth from "./components/RequireAuth";
@@ -25,6 +26,7 @@ function App() {
                 <Route element={<PersistLogin />}>
                     <Route element={<RequireAuth allowedRoles={[1000]} />}>
                         <Route path="/" element={<Home />} />
+                        <Route path="game" element={<Game />} />
                     </Route>
                     
                     <Route element={<RequireAuth allowedRoles={[9000]} />}>
