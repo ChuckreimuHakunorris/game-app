@@ -56,7 +56,7 @@ const Login = () => {
             } else if (err.response?.status === 400) {
                 setErrMsg("Missing Username or Password");
             } else if (err.response?.status === 401) {
-                setErrMsg("Unauthorized");
+                setErrMsg("Incorrect Username or Password");
             } else {
                 setErrMsg("Login failed");
             }
@@ -111,7 +111,7 @@ const Login = () => {
             <p>
                 Need an Account?<br />
                 <span className="line">
-                    <Link to="/register">Sign In</Link>
+                    <Link to="/register">Sign Up</Link>
                 </span>
             </p>
         </section>
