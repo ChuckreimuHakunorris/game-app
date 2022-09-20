@@ -6,9 +6,10 @@ import useAuth from "../hooks/useAuth";
 const PersistLogin = () => {
     const [isLoading, setIsLoading] = useState(true);
     const refresh = useRefreshToken();
-    const { auth } = useAuth();
+    const { auth, persist } = useAuth();
 
     useEffect(() => {
+        let isMounted = true;
         const verifyRefreshToken = async () => {
             try {
                 await refresh();
@@ -17,16 +18,17 @@ const PersistLogin = () => {
                 console.error(err);
             }
             finally {
-                setIsLoading(false);
+                isMounted && setIsLoading(false);
             }
         }
 
         !auth?.accessToken ? verifyRefreshToken() : setIsLoading(false);
 
+        return () => isMounted = false;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect (() => {
+    useEffect(() => {
         console.log(`isLoading: ${isLoading}`);
         console.log(`aT: ${JSON.stringify(auth?.accessToken)}`);
 
@@ -35,10 +37,12 @@ const PersistLogin = () => {
 
     return (
         <>
-            {isLoading
-            ? <p>Loading...</p>
-            : <Outlet />
-        }
+            {!persist
+                ? <Outlet />
+                : isLoading
+                    ? <p>Loading...</p>
+                    : <Outlet />
+            }
         </>
     )
 }
