@@ -1,22 +1,25 @@
 import { useRef, useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
-import useLocalStorage from "../hooks/useLocalStorage";
+import useInput from "../hooks/useInput";
+import useToggle from "../hooks/useToggle";
 
 import axios from "../api/axios";
 const LOGIN_URL = "/auth";
 
 const Login = () => {
-    const { setAuth, persist, setPersist } = useAuth();
+    const { setAuth } = useAuth();
 
     const navigate = useNavigate();
 
     const userRef = useRef();
     const errRef = useRef();
 
-    const [user, setUser] =  useLocalStorage("user", ""); //useState("");
+    const [user, resetUser, userAttributes] =  useInput("user", "");
     const [pwd, setPwd] = useState("");
     const [errMsg, setErrMsg] = useState("");
+
+    const [check, toggleCheck] = useToggle("persist", false);
 
     useEffect(() => {
         userRef.current.focus();
@@ -43,7 +46,7 @@ const Login = () => {
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
 
-            setUser("");
+            resetUser();
             setPwd("");
 
             setAuth({ user, pwd, roles, accessToken });
@@ -63,15 +66,7 @@ const Login = () => {
             errRef.current.focus();
         }
     }
-
-    const togglePersist = () => {
-        setPersist(prev => !prev);
-    }
-
-    useEffect(() => {
-        localStorage.setItem("persist", persist);
-    }, [persist])
-
+    
     return (
         <section>
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
@@ -83,8 +78,7 @@ const Login = () => {
                     id="username"
                     ref={userRef}
                     autoComplete="off"
-                    onChange={(e) => setUser(e.target.value)}
-                    value={user}
+                    {...userAttributes}
                     required
                 />
 
@@ -102,8 +96,8 @@ const Login = () => {
                     <input
                         type="checkbox"
                         id="persist"
-                        onChange={togglePersist}
-                        checked={persist}
+                        onChange={toggleCheck}
+                        checked={check}
                     />
                     <label htmlFor="persist">Remember Me</label>
                 </div>
