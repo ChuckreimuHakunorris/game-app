@@ -15,8 +15,9 @@ const Game = () => {
 
     const joinRoom = () => {
         if (room !== "") {
-            socket = io.connect("http://localhost:3500");
-            socket?.emit("join_room", room);
+            //socket = io.connect("http://localhost:3500");
+            socket = io.connect("https://castrum-tactics.onrender.com/");
+            socket.emit("join_room", room);
         }
     }
 
