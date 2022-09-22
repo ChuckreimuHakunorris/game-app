@@ -38,6 +38,36 @@ section {
     border-radius: 0.5rem;
 }
 
+.gameContainer {
+    width: 100%;
+    max-width: 800px;
+    min-height: 600px;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 1rem;
+    background-color: rgba(0,0,0,0.4);
+    border-radius: 0.5rem;
+}
+
+.gameLog {
+    font-family: 'Courier', monospace;
+    background-color: black;
+    font-size: 16px;
+    color: lime;
+    width: 100%;
+    max-width: 700px;
+    min-height: 300px;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 6px;
+    margin: 1rem;
+    -webkit-font-smoothing : none;
+}
+
+.gameLog_socketId {
+    color: grey;
+}
+
 form {
     display: flex;
     flex-direction: column;

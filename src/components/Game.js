@@ -5,50 +5,73 @@ import io from "socket.io-client";
 
 var socket;
 
-const Game = () => {
-    const [value] = useLocalStorage("user");
+function Log(props) {
+    const messages = props.messages;
+    const listItems = messages.map((message, index) =>
+        <p key={index}>
+            {message}
+        </p>
+    );
+    return (
+        <>{listItems}</>
+    );
+}
 
-    const [room, setRoom] = useState("");
+const Game = () => {
+    const [username] = useLocalStorage("user");
+
+    const room = 1;
 
     const [message, setMessage] = useState("");
-    const [messageReceived, setMessageReceived] = useState("");
+
+    const [log, setLog] = useState([]);
 
     const joinRoom = () => {
-        if (room !== "") {
-            //socket = io.connect("http://localhost:3500");
-            socket = io.connect("https://castrum-tactics.onrender.com");
-            socket.emit("join_room", room);
-        }
+        //if (room !== "") {
+        socket = io.connect("http://localhost:3500");
+        //socket = io.connect("https://castrum-tactics.onrender.com");
+
+        socket.emit("join_room", { room, username });
     }
 
     const sendMessage = () => {
-        socket?.emit("send_message", { message, room });
+        socket.emit("send_message", { message, room, username });
     }
 
-    useEffect(() =>{
-        socket?.on("receive_message", (data) => {
-            setMessageReceived(data.message);
+    useEffect(() => {
+        joinRoom();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    useEffect(() => {
+        socket.on("receive_message", (data) => {
+            let msg = `${data.username}: ${data.message}`
+            setLog(current => [...current, msg]);
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [socket])
+    }, [])
+
+    useEffect(() => {
+        socket.on("confirm_connection", (data) => {
+            setLog(current => [...current, `${data.username} (${socket.id}) 
+            connected to the room.`]);
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
-        <section>
-            <h1>Home</h1>
+        <div className="gameContainer">
+            <h1>Game</h1>
             <br />
-            <p>You are logged in as { value }</p>
-            <br />
-            <input type="text" placeholder="Room Number..." onChange={(event) => {
-                setRoom(event.target.value)
-            }}/>
-            <button onClick={joinRoom}>Join Room</button>
-            <br />
+            <p>You are logged in as {username}</p>
+            <div className="gameLog">
+                <Log messages={log}/>
+            </div>
             <input type="text" placeholder="Message..." onChange={(event) => {
                 setMessage(event.target.value)
-            }}/>
+            }} />
             <button onClick={sendMessage}>Send Message</button>
-            <p>Message: { messageReceived }</p>
-        </section>
+        </div>
     )
 }
 
