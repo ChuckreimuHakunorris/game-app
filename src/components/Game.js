@@ -1,17 +1,37 @@
 import useLocalStorage from "../hooks/useLocalStorage";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import io from "socket.io-client";
 
 var socket;
 
 function Log(props) {
-    const messages = props.messages;
-    const listItems = messages.map((message, index) =>
-        <p key={index}>
-            {message}
-        </p>
-    );
+    const listItems = props.messages.map((message, index) => {
+        let nameColor = "gameLog_usernameOpponent";
+        if (message.username === props.username) {
+            nameColor = "gameLog_usernameOwn";
+        }
+
+        switch (message.type) {
+            case "chat_message":
+                return (
+                    <p key={index}>
+                        <span className={nameColor}>{message.username} </span>
+                        <span className="gameLog_socketId">[{message.socketId}] </span>
+                        <span className="gameLog_message">{message.message}</span>
+                    </p>)
+            case "connection_confirmation":
+                return (
+                    <p key={index}>
+                        <span className={nameColor}>{message.username} </span>
+                        <span className="gameLog_socketId">[{message.socketId}] </span>
+                        {message.message}
+                    </p>)
+            default:
+                break;
+        }
+        return (<p>Something went wrong!</p>);
+    });
     return (
         <>{listItems}</>
     );
@@ -26,10 +46,11 @@ const Game = () => {
 
     const [log, setLog] = useState([]);
 
+    const messagesEndRef = useRef(null);
+
     const joinRoom = () => {
-        //if (room !== "") {
-        //socket = io.connect("http://localhost:3500");
-        socket = io.connect("https://castrum-tactics.onrender.com");
+        socket = io.connect("http://localhost:3500");
+        //socket = io.connect("https://castrum-tactics.onrender.com");
 
         socket.emit("join_room", { room, username });
     }
@@ -45,19 +66,28 @@ const Game = () => {
 
     useEffect(() => {
         socket.on("receive_message", (data) => {
-            let msg = `${data.username}: ${data.message}`
-            setLog(current => [...current, msg]);
+            data.type = "chat_message";
+            setLog(current => [...current, data]);
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
         socket.on("confirm_connection", (data) => {
-            setLog(current => [...current, `${data.username} (${socket.id}) 
-            connected to the room.`]);
+            data.type = "connection_confirmation";
+            data.message = " connected to the room.";
+            setLog(current => [...current, data]);
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [log])
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
 
     return (
         <div className="gameContainer">
@@ -65,7 +95,8 @@ const Game = () => {
             <br />
             <p>You are logged in as {username}</p>
             <div className="gameLog">
-                <Log messages={log}/>
+                <Log messages={log} username={username}/>
+                <div ref={messagesEndRef} />
             </div>
             <input type="text" placeholder="Message..." onChange={(event) => {
                 setMessage(event.target.value)
