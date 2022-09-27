@@ -175,3 +175,10 @@ button {
 .gameLog_message {
     color: white;
 }
+
+.gridSquare {
+    border-color: black;
+    background-color: antiquewhite;
+    width: 32px;
+    height: 32px;
+}

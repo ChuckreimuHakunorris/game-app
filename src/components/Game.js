@@ -37,6 +37,22 @@ function Log(props) {
     );
 }
 
+function GameGrid(props) {
+    let grid = props.grid;
+    // loop the outer array
+    for (let i = 0; i < grid.length; i++) {
+        // get the size of the inner array
+        var innerArrayLength = grid[i].length;
+        // loop the inner array
+        for (let j = 0; j < innerArrayLength; j++) {
+            console.log('[' + i + ',' + j + '] = ' + grid[i][j]);
+            return (
+                <div className="gridSquare"></div>
+            )
+        }
+    }
+}
+
 const Game = () => {
     const [username] = useLocalStorage("user");
 
@@ -47,6 +63,14 @@ const Game = () => {
     const [log, setLog] = useState([]);
 
     const messagesEndRef = useRef(null);
+
+    let grid = [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
+    ];
 
     const joinRoom = () => {
         socket = io.connect("http://localhost:3500");
@@ -94,8 +118,11 @@ const Game = () => {
             <h1>Game</h1>
             <br />
             <p>You are logged in as {username}</p>
+            <div>
+                <GameGrid grid={grid}/>
+            </div>
             <div className="gameLog">
-                <Log messages={log} username={username}/>
+                <Log messages={log} username={username} />
                 <div ref={messagesEndRef} />
             </div>
             <input type="text" placeholder="Message..." onChange={(event) => {
