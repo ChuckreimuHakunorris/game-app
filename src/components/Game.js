@@ -45,7 +45,8 @@ function GameGrid(props) {
             {grid.map((rows, index) => {
                 return (
                     rows.map((rowItems, sIndex) => {
-                        return <div className="gridSquare"> {rowItems} </div>
+                        console.log(`${index}-${sIndex}`);
+                        return <div key={`${index}-${sIndex}`}className="gridSquare" onClick={props.clickSquare}> {rowItems} </div>
                     })
                 );
             })}
@@ -67,9 +68,9 @@ const Game = () => {
     let grid = [
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0]
+        [0, 0, 1, 0, 0],
+        [0, 1, 0, 1, 0],
+        [0, 0, 1, 0, 0]
     ];
 
     const joinRoom = () => {
@@ -113,6 +114,10 @@ const Game = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }
 
+    function clickSquare(e) {
+        e.target.innerHTML = "clicked";
+    }
+
     return (
         <div className="gameContainer">
             <h1>Game</h1>
@@ -120,7 +125,7 @@ const Game = () => {
             <p>You are logged in as {username}</p>
             <br />
             <div className="gridContainer">
-                <GameGrid grid={grid} />
+                <GameGrid grid={grid} clickSquare={clickSquare}/>
             </div>
             <div className="gameLog">
                 <Log messages={log} username={username} />
