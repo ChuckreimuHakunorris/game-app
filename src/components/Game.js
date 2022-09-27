@@ -39,18 +39,18 @@ function Log(props) {
 
 function GameGrid(props) {
     let grid = props.grid;
-    // loop the outer array
-    for (let i = 0; i < grid.length; i++) {
-        // get the size of the inner array
-        var innerArrayLength = grid[i].length;
-        // loop the inner array
-        for (let j = 0; j < innerArrayLength; j++) {
-            console.log('[' + i + ',' + j + '] = ' + grid[i][j]);
-            return (
-                <div className="gridSquare"></div>
-            )
-        }
-    }
+
+    return (
+        <div className="gameGrid">
+            {grid.map((rows, index) => {
+                return (
+                    rows.map((rowItems, sIndex) => {
+                        return <div className="gridSquare"> {rowItems} </div>
+                    })
+                );
+            })}
+        </div>
+    );
 }
 
 const Game = () => {
@@ -118,8 +118,9 @@ const Game = () => {
             <h1>Game</h1>
             <br />
             <p>You are logged in as {username}</p>
-            <div>
-                <GameGrid grid={grid}/>
+            <br />
+            <div className="gridContainer">
+                <GameGrid grid={grid} />
             </div>
             <div className="gameLog">
                 <Log messages={log} username={username} />
