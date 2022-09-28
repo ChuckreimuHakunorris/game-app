@@ -1,5 +1,6 @@
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useEffect, useState, useRef } from "react";
+import gameGrid from "./Game/Grid";
 
 import io from "socket.io-client";
 
@@ -37,6 +38,21 @@ function Log(props) {
     );
 }
 
+function Square(props) {
+    function clickSquare() {
+        props.setSelectedX(props.X);
+        props.setSelectedY(props.Y);
+
+        props.setGridSelected(props.X, props.Y);
+    }
+
+    return (
+        <div key={`${props.X}-${props.Y}`} className="gridSquare" onClick={clickSquare}>
+            {props.data.status}
+        </div>
+    )
+}
+
 function GameGrid(props) {
     let grid = props.grid;
 
@@ -45,8 +61,11 @@ function GameGrid(props) {
             {grid.map((rows, index) => {
                 return (
                     rows.map((rowItems, sIndex) => {
-                        console.log(`${index}-${sIndex}`);
-                        return <div key={`${index}-${sIndex}`}className="gridSquare" onClick={props.clickSquare}> {rowItems} </div>
+                        return <Square key={`${index}-${sIndex}`} X={sIndex} Y={index}
+                            setSelectedX={props.setSelectedX}
+                            setSelectedY={props.setSelectedY}
+                            setGridSelected={props.setGridSelected}
+                            data={rowItems} />
                     })
                 );
             })}
@@ -57,6 +76,9 @@ function GameGrid(props) {
 const Game = () => {
     const [username] = useLocalStorage("user");
 
+    const [selectedX, setSelectedX] = useState(-1);
+    const [selectedY, setSelectedY] = useState(-1);
+
     const room = 1;
 
     const [message, setMessage] = useState("");
@@ -65,13 +87,27 @@ const Game = () => {
 
     const messagesEndRef = useRef(null);
 
-    let grid = [
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 0],
-        [0, 1, 0, 1, 0],
-        [0, 0, 1, 0, 0]
-    ];
+    let [grid, setGrid] = useState(gameGrid);
+
+    function setGridSelected(x, y) {
+        let tempGrid = grid;
+        tempGrid[y][x].status = "selected";
+        tempGrid = setOthersNotSelected(x, y, tempGrid);
+        setGrid(tempGrid);
+    }
+
+    function setOthersNotSelected(selectedX, selectedY, grid) {
+        for (var y = 0; y < grid.length; y++) {
+            for (var x = 0; x < grid[y].length; x++) {
+                if (x !== selectedX || y !== selectedY) {
+                    if (grid[y][x].status === "selected") {
+                        grid[y][x].status = "selectable";
+                    }
+                }
+            }
+        }
+        return grid;
+    }
 
     const joinRoom = () => {
         socket = io.connect("http://localhost:3500");
@@ -85,6 +121,8 @@ const Game = () => {
     }
 
     useEffect(() => {
+        setSelectedX(-1);
+        setSelectedY(-1);
         joinRoom();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -114,10 +152,6 @@ const Game = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }
 
-    function clickSquare(e) {
-        e.target.innerHTML = "clicked";
-    }
-
     return (
         <div className="gameContainer">
             <h1>Game</h1>
@@ -125,8 +159,9 @@ const Game = () => {
             <p>You are logged in as {username}</p>
             <br />
             <div className="gridContainer">
-                <GameGrid grid={grid} clickSquare={clickSquare}/>
+                <GameGrid grid={grid} setSelectedX={setSelectedX} setSelectedY={setSelectedY} setGridSelected={setGridSelected} />
             </div>
+            <p>X: {selectedX} Y: {selectedY}</p>
             <div className="gameLog">
                 <Log messages={log} username={username} />
                 <div ref={messagesEndRef} />
@@ -135,6 +170,7 @@ const Game = () => {
                 setMessage(event.target.value)
             }} />
             <button onClick={sendMessage}>Send Message</button>
+
         </div>
     )
 }
