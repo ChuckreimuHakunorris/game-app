@@ -157,10 +157,12 @@ const Game = () => {
             <br />
             <p>You are logged in as {username}</p>
             <br />
-            <div className="gridContainer">
-                <button>Reconnect</button>
-                <GameGrid grid={grid} setGridSelected={setGridSelected} />
-                <button>Send Move</button>
+            <div className="gameAreaContainer">
+                <div className="gridContainer">
+                    <button className="gameButton">Reconnect</button>
+                    <GameGrid grid={grid} setGridSelected={setGridSelected} />
+                    <button className="gameButton">Send Move</button>
+                </div>
             </div>
             <p>X: {selectedX} Y: {selectedY}</p>
             <div className="gameLog">
