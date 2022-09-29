@@ -40,15 +40,14 @@ function Log(props) {
 
 function Square(props) {
     function clickSquare() {
-        props.setSelectedX(props.X);
-        props.setSelectedY(props.Y);
-
-        props.setGridSelected(props.X, props.Y);
+        if (props.data.status === "selectable") {
+            props.setGridSelected(props.X, props.Y);
+        }
     }
 
     return (
-        <div key={`${props.X}-${props.Y}`} className="gridSquare" onClick={clickSquare}>
-            {props.data.status}
+        <div key={`${props.X}-${props.Y}`} id={`square_${props.data.status}`} className="gridSquare" onClick={clickSquare}>
+            {props.data.content}
         </div>
     )
 }
@@ -62,8 +61,6 @@ function GameGrid(props) {
                 return (
                     rows.map((rowItems, sIndex) => {
                         return <Square key={`${index}-${sIndex}`} X={sIndex} Y={index}
-                            setSelectedX={props.setSelectedX}
-                            setSelectedY={props.setSelectedY}
                             setGridSelected={props.setGridSelected}
                             data={rowItems} />
                     })
@@ -90,6 +87,8 @@ const Game = () => {
     let [grid, setGrid] = useState(gameGrid);
 
     function setGridSelected(x, y) {
+        setSelectedX(x);
+        setSelectedY(y);
         let tempGrid = grid;
         tempGrid[y][x].status = "selected";
         tempGrid = setOthersNotSelected(x, y, tempGrid);
@@ -159,7 +158,9 @@ const Game = () => {
             <p>You are logged in as {username}</p>
             <br />
             <div className="gridContainer">
-                <GameGrid grid={grid} setSelectedX={setSelectedX} setSelectedY={setSelectedY} setGridSelected={setGridSelected} />
+                <button>Reconnect</button>
+                <GameGrid grid={grid} setGridSelected={setGridSelected} />
+                <button>Send Move</button>
             </div>
             <p>X: {selectedX} Y: {selectedY}</p>
             <div className="gameLog">

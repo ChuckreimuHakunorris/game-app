@@ -187,7 +187,7 @@ button {
 }
 
 .gridSquare {
-    border: 2px solid black;
+    border: 2px solid black;    
     background-color: antiquewhite;
     width: 64px;
     height: 64px;
@@ -200,4 +200,16 @@ button {
 .gridContainer {
     align-content:space-between;
     text-align: center;
+}
+
+#square_selectable {
+    border-color: blue;
+}
+
+#square_unselectable {
+    border-color: black;
+}
+
+#square_selected {
+    border-color: rgb(37, 233, 37);
 }
