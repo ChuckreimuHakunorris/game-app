@@ -192,8 +192,8 @@ button:hover {
     border: 4px solid rgb(76, 71, 71);
     margin-left: 26px;
     margin-right: 26px;
-    width: 328px;
-    height: 328px;
+    width: 348px;
+    height: 348px;
     color: black;
     display: inline-block;
     cursor: pointer;
@@ -201,13 +201,20 @@ button:hover {
 
 .gridSquare {
     border: 2px solid black;
-    background-color: antiquewhite;
-    width: 64px;
-    height: 64px;
+    background-color: black;
+    width: 68px;
+    height: 68px;
     line-height: 64px;
     display: inline-block;
     text-align: center;
     font-size: 12px;
+    position: relative;
+}
+
+.squareSprite {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .gridContainer {
@@ -216,7 +223,7 @@ button:hover {
 }
 
 #square_selectable {
-    border-color: blue;
+    border-color: yellow;
 }
 
 #square_unselectable {
