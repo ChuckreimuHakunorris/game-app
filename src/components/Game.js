@@ -38,6 +38,13 @@ function Log(props) {
                     <p key={index}>
                         <span className={moveColor}>{message.message}</span>
                     </p>)
+            case "receive_moves":
+                return (
+                    <p key={index}>
+                        {message.message}
+                        <span className="gameLog_moveHost"> {message.hostData} </span>
+                        <span className="gameLog_moveOpponent">{message.opponentData}</span>
+                    </p>)
             default:
                 break;
         }
@@ -170,6 +177,19 @@ const Game = () => {
     useEffect(() => {
         socket.on("receive_message", (data) => {
             data.type = "chat_message";
+            setLog(current => [...current, data]);
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    useEffect(() => {
+        socket.on("receive_moves", (hostMove, opponentMove) => {
+            let data = {
+                type: "receive_moves",
+                hostData: `Host: [${hostMove.x}, ${hostMove.y}]`,
+                opponentData: `Opponent: [${opponentMove.x}, ${opponentMove.y}]`,
+                message: "Received move data from server! "
+            }
             setLog(current => [...current, data]);
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
