@@ -90,6 +90,8 @@ function GameGrid(props) {
 const Game = () => {
     const [username] = useLocalStorage("user");
 
+    const [gameState, setGameState] = useState("opening");
+
     const [role, setRole] = useState("host");
 
     const [selectedX, setSelectedX] = useState(-1);
@@ -125,6 +127,43 @@ const Game = () => {
             }
         }
         return grid;
+    }
+
+    function resolveMoves(hostMove, opponentMove) {
+        let tempGrid = grid;
+
+        tempGrid[hostMove.y][hostMove.x].content = "hostKnight";
+        tempGrid[opponentMove.y][opponentMove.x].content = "opponentKnight";
+
+        if (hostMove.x === opponentMove.x && hostMove.y === opponentMove.y) {
+            tempGrid[hostMove.y][hostMove.x].content = "grave";
+        }
+
+        setSelectable(tempGrid);
+
+        setGrid(tempGrid);
+    }
+
+    function setSelectable(grid) {
+        switch (gameState) {
+            case "opening":
+                for (var y = 0; y < grid.length; y++) {
+                    for (var x = 0; x < grid[y].length; x++) {
+                        if (grid[y][x].status === "selected") {
+                            grid[y][x].status = "selectable";
+                            setSelectedX(-1);
+                            setSelectedY(-1);
+                        }
+
+                        if (grid[y][x].status === "selectable" && grid[y][x].content !== "empty") {
+                            grid[y][x].status = "unselectable";
+                        }
+                    }
+                }
+                return grid;
+            default:
+                return grid;
+        }
     }
 
     const joinRoom = () => {
@@ -170,6 +209,7 @@ const Game = () => {
     useEffect(() => {
         setSelectedX(-1);
         setSelectedY(-1);
+        setGameState("opening");
         joinRoom();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -184,11 +224,13 @@ const Game = () => {
 
     useEffect(() => {
         socket.on("receive_moves", (hostMove, opponentMove) => {
+            resolveMoves(hostMove, opponentMove);
+
             let data = {
                 type: "receive_moves",
                 hostData: `Host: [${hostMove.x}, ${hostMove.y}]`,
                 opponentData: `Opponent: [${opponentMove.x}, ${opponentMove.y}]`,
-                message: "Received move data from server! "
+                message: "Received move data from server: "
             }
             setLog(current => [...current, data]);
         })
