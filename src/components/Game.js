@@ -9,8 +9,13 @@ var socket;
 function Log(props) {
     const listItems = props.messages.map((message, index) => {
         let nameColor = "gameLog_usernameOpponent";
-        if (message.username === props.username) {
-            nameColor = "gameLog_usernameOwn";
+        if (message.role === "host") {
+            nameColor = "gameLog_usernameHost";
+        }
+
+        let moveColor = "gameLog_moveOpponent";
+        if (message.role === "host") {
+            moveColor = "gameLog_moveHost";
         }
 
         switch (message.type) {
@@ -27,6 +32,11 @@ function Log(props) {
                         <span className={nameColor}>{message.username} </span>
                         <span className="gameLog_socketId">[{message.socketId}] </span>
                         {message.message}
+                    </p>)
+            case "send_move":
+                return (
+                    <p key={index}>
+                        <span className={moveColor}>{message.message}</span>
                     </p>)
             default:
                 break;
@@ -73,6 +83,8 @@ function GameGrid(props) {
 const Game = () => {
     const [username] = useLocalStorage("user");
 
+    const [role, setRole] = useState("host");
+
     const [selectedX, setSelectedX] = useState(-1);
     const [selectedY, setSelectedY] = useState(-1);
 
@@ -109,14 +121,43 @@ const Game = () => {
     }
 
     const joinRoom = () => {
-        socket = io.connect("http://localhost:3500");
         //socket = io.connect("https://castrum-tactics.onrender.com");
 
-        socket.emit("join_room", { room, username });
+        if (username === "WilliamDell") {
+            setRole("host");
+        } else {
+            setRole("opponent");
+        }
+
+        socket = io.connect("http://localhost:3500");
+        socket.emit("join_room", { room, username, role });
     }
 
     const sendMessage = () => {
-        socket.emit("send_message", { message, room, username });
+        socket.emit("send_message", { message, room, username, role });
+    }
+
+    const sendMove = () => {
+        const x = selectedX;
+        const y = selectedY;
+
+        if (x >= 0 && y >= 0) {
+            let logData = {
+                type: "send_move",
+                message: `Sending move [${x}, ${y}] to the server =>`,
+                role
+            }
+            setLog(current => [...current, logData]);
+
+            socket.emit("send_move", x, y, room, username, role, message => {
+                let logData = {
+                    type: "send_move",
+                    message: message,
+                    role
+                }
+                setLog(current => [...current, logData]);
+            });
+        }
     }
 
     useEffect(() => {
@@ -138,6 +179,7 @@ const Game = () => {
         socket.on("confirm_connection", (data) => {
             data.type = "connection_confirmation";
             data.message = " connected to the room.";
+            console.log(data);
             setLog(current => [...current, data]);
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -161,12 +203,12 @@ const Game = () => {
                 <div className="gridContainer">
                     <button className="gameButton">Reconnect</button>
                     <GameGrid grid={grid} setGridSelected={setGridSelected} />
-                    <button className="gameButton">Send Move</button>
+                    <button className="gameButton" onClick={sendMove}>Send Move</button>
                 </div>
             </div>
             <p>X: {selectedX} Y: {selectedY}</p>
             <div className="gameLog">
-                <Log messages={log} username={username} />
+                <Log messages={log} username={username} role={role} />
                 <div ref={messagesEndRef} />
             </div>
             <input type="text" placeholder="Message..." onChange={(event) => {

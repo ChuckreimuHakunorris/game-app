@@ -168,12 +168,20 @@ button:hover {
     color: grey;
 }
 
-.gameLog_usernameOwn {
+.gameLog_usernameHost {
     color: red;
+}
+
+.gameLog_moveHost {
+    color:rgb(255, 87, 137);
 }
 
 .gameLog_usernameOpponent {
     color: #4d79ff;
+}
+
+.gameLog_moveOpponent {
+    color: #85a4ff;
 }
 
 .gameLog_message {
