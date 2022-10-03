@@ -23,14 +23,14 @@ function Log(props) {
                 return (
                     <p key={index}>
                         <span className={nameColor}>{message.username} </span>
-                        <span className="gameLog_socketId">[{message.socketId}] </span>
+                        {/*<span className="gameLog_socketId">[{message.socketId}] </span>*/}
                         <span className="gameLog_message">{message.message}</span>
                     </p>)
             case "connection_confirmation":
                 return (
                     <p key={index}>
                         <span className={nameColor}>{message.username} </span>
-                        <span className="gameLog_socketId">[{message.socketId}] </span>
+                        {/*<span className="gameLog_socketId">[{message.socketId}] </span>*/}
                         {message.message}
                     </p>)
             case "send_move":
@@ -64,9 +64,11 @@ function Square(props) {
 
     return (
         <div key={`${props.X}-${props.Y}`} id={`square_${props.data.status}`}
-             className={`gridSquare ground_${props.data.groundHealth}`} onClick={clickSquare}>
-                 .
-            <img src={`/game/${props.data.content}.png`} className="squareSprite" alt="missing"/>
+            className={`gridSquare`} onClick={clickSquare}>
+            <img src={`/game/ground_${props.data.groundHealth}.png`} className="squareSprite" alt="missing" />
+            .
+            <img src={`/game/${props.data.content}.png`} className="squareSprite" alt="missing" />
+            <img src={`/game/${props.data.status}.png`} className="squareSprite" alt="missing" />
         </div>
     )
 }
@@ -143,6 +145,11 @@ const Game = () => {
 
         setSelectable(tempGrid);
 
+        if (getSelectableCount(tempGrid) <= 0) {
+            setGameState("main");
+            setSelectable(tempGrid);
+        }
+
         setGrid(tempGrid);
     }
 
@@ -163,20 +170,35 @@ const Game = () => {
                     }
                 }
                 return grid;
+            case "main":
+                
+                return grid;
             default:
                 return grid;
         }
     }
 
-    const joinRoom = () => {
-        //socket = io.connect("https://castrum-tactics.onrender.com");
+    function getSelectableCount(grid) {
+        let selectableCount = 0;
 
+        for (var y = 0; y < grid.length; y++) {
+            for (var x = 0; x < grid[y].length; x++) {
+                if (grid[y][x].status === "selectable")
+                    selectableCount++;
+            }
+        }
+
+        return selectableCount;
+    }
+
+    const joinRoom = () => {
         if (username === "WilliamDell") {
             setRole("host");
         } else {
             setRole("opponent");
         }
 
+        //socket = io.connect("https://castrum-tactics.onrender.com");
         socket = io.connect("http://localhost:3500");
         socket.emit("join_room", { room, username, role });
     }
@@ -217,6 +239,12 @@ const Game = () => {
     }, [])
 
     useEffect(() => {
+        console.log("gamestate changed! It is now " + gameState);
+        setSelectable(grid);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [gameState])
+
+    useEffect(() => {
         socket.on("receive_message", (data) => {
             data.type = "chat_message";
             setLog(current => [...current, data]);
@@ -243,7 +271,6 @@ const Game = () => {
         socket.on("confirm_connection", (data) => {
             data.type = "connection_confirmation";
             data.message = " connected to the room.";
-            console.log(data);
             setLog(current => [...current, data]);
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -270,7 +297,6 @@ const Game = () => {
                     <button className="gameButton" onClick={sendMove}>Send Move</button>
                 </div>
             </div>
-            <p>X: {selectedX} Y: {selectedY}</p>
             <div className="gameLog">
                 <Log messages={log} username={username} role={role} />
                 <div ref={messagesEndRef} />
@@ -279,7 +305,6 @@ const Game = () => {
                 setMessage(event.target.value)
             }} />
             <button onClick={sendMessage}>Send Message</button>
-
         </div>
     )
 }

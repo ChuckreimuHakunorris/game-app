@@ -221,18 +221,6 @@ button:hover {
     display: inline-flex;
 }
 
-#square_selectable {
-    border-color: yellow;
-}
-
-#square_unselectable {
-    border-color: black;
-}
-
-#square_selected {
-    border-color: rgb(37, 233, 37);
-}
-
 .gameButton {
     padding: 12px 15px;
     font-size: 20px;
@@ -265,8 +253,4 @@ button:hover {
 
 .gameAreaContainer {
     text-align: center;
-}
-
-.ground_3 {
-    background-color: #196934;
 }
