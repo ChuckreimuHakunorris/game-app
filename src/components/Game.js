@@ -65,7 +65,7 @@ function Square(props) {
     return (
         <div key={`${props.X}-${props.Y}`} id={`square_${props.data.status}`}
              className={`gridSquare ground_${props.data.groundHealth}`} onClick={clickSquare}>
-                0
+                 .
             <img src={`/game/${props.data.content}.png`} className="squareSprite" alt="missing"/>
         </div>
     )
