@@ -189,25 +189,21 @@ button:hover {
 }
 
 .gameGrid {
-    border: 4px solid rgb(76, 71, 71);
+    border: 4px solid black;
     margin-left: 26px;
     margin-right: 26px;
-    width: 348px;
-    height: 348px;
+    width: 328px;
+    height: 328px;
     color: black;
     display: inline-block;
     cursor: pointer;
 }
 
 .gridSquare {
-    border: 2px solid black;
     background-color: black;
-    width: 68px;
-    height: 68px;
-    line-height: 64px;
+    width: 64px;
+    height: 64px;
     display: inline-block;
-    text-align: center;
-    font-size: 12px;
     position: relative;
 }
 
@@ -215,6 +211,9 @@ button:hover {
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
 }
 
 .gridContainer {
@@ -266,4 +265,8 @@ button:hover {
 
 .gameAreaContainer {
     text-align: center;
+}
+
+.ground_3 {
+    background-color: #196934;
 }
