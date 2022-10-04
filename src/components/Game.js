@@ -94,8 +94,6 @@ function GameGrid(props) {
 const Game = () => {
     const [username] = useLocalStorage("user");
 
-    //let [gameState, setGameState] = useState("default");
-
     let gState = useRef("default");
 
     let role = useRef("host");
@@ -138,8 +136,31 @@ const Game = () => {
     function resolveMoves(hostMove, opponentMove) {
         let tempGrid = grid.current;
 
-        tempGrid[hostMove.y][hostMove.x].content = "hostKnight";
-        tempGrid[opponentMove.y][opponentMove.x].content = "opponentKnight";
+        if (tempGrid[hostMove.y][hostMove.x].content === "hostKnight") {
+            tempGrid[hostMove.y][hostMove.x].content = "hostCastle";
+        } else if (tempGrid[hostMove.y][hostMove.x].content === "opponentKnight") {
+            tempGrid[hostMove.y][hostMove.x].content = "hostKnight";
+            tempGrid[hostMove.y][hostMove.x].groundHealth--;
+
+            if (tempGrid[hostMove.y][hostMove.x].groundHealth <= 0) {
+                tempGrid[hostMove.y][hostMove.x].content = "grave";
+            }
+        } else {
+            tempGrid[hostMove.y][hostMove.x].content = "hostKnight";
+        }
+
+        if (tempGrid[opponentMove.y][opponentMove.x].content === "opponentKnight") {
+            tempGrid[opponentMove.y][opponentMove.x].content = "opponentCastle";
+        } else if (tempGrid[opponentMove.y][opponentMove.x].content === "hostKnight") {
+            tempGrid[opponentMove.y][opponentMove.x].content = "opponentKnight";
+            tempGrid[opponentMove.y][opponentMove.x].groundHealth--;
+
+            if (tempGrid[opponentMove.y][opponentMove.x].groundHealth <= 0) {
+                tempGrid[opponentMove.y][opponentMove.x].content = "grave";
+            }
+        } else {
+            tempGrid[opponentMove.y][opponentMove.x].content = "opponentKnight";
+        }
 
         if (hostMove.x === opponentMove.x && hostMove.y === opponentMove.y) {
             tempGrid[hostMove.y][hostMove.x].content = "grave";
@@ -180,7 +201,8 @@ const Game = () => {
                 }
                 for (y = 0; y < grid.length; y++) {
                     for (x = 0; x < grid[y].length; x++) {
-                        if (grid[y][x].content === `${role.current}Knight`) {
+                        if (grid[y][x].content === `${role.current}Knight`
+                            || grid[y][x].content === `${role.current}Castle`) {
                             grid[y][x].status = "selectable";
                             if (x > 0 && y > 0)
                                 grid[y - 1][x - 1].status = "selectable";
@@ -204,6 +226,13 @@ const Game = () => {
                             if (x < 4 && y < 4)
                                 grid[y + 1][x + 1].status = "selectable";
                         }
+                    }
+                }
+                for (y = 0; y < grid.length; y++) {
+                    for (x = 0; x < grid[y].length; x++) {
+                        if (grid[y][x].content === "grave" || grid[y][x].content === "hostCastle"
+                            || grid[y][x].content === "opponentCastle")
+                            grid[y][x].status = "unselectable";
                     }
                 }
 
