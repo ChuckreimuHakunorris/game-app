@@ -134,6 +134,7 @@ const Game = () => {
     }
 
     function resolveMoves(hostMove, opponentMove) {
+        let groundHealthLowered = false;
         let tempGrid = grid.current;
 
         if (tempGrid[hostMove.y][hostMove.x].content === "hostKnight") {
@@ -141,6 +142,7 @@ const Game = () => {
         } else if (tempGrid[hostMove.y][hostMove.x].content === "opponentKnight") {
             tempGrid[hostMove.y][hostMove.x].content = "hostKnight";
             tempGrid[hostMove.y][hostMove.x].groundHealth--;
+            groundHealthLowered = true;
 
             if (tempGrid[hostMove.y][hostMove.x].groundHealth <= 0) {
                 tempGrid[hostMove.y][hostMove.x].content = "grave";
@@ -153,7 +155,9 @@ const Game = () => {
             tempGrid[opponentMove.y][opponentMove.x].content = "opponentCastle";
         } else if (tempGrid[opponentMove.y][opponentMove.x].content === "hostKnight") {
             tempGrid[opponentMove.y][opponentMove.x].content = "opponentKnight";
-            tempGrid[opponentMove.y][opponentMove.x].groundHealth--;
+
+            if (hostMove.x === opponentMove.x && hostMove.y === opponentMove.y) { } else
+                tempGrid[opponentMove.y][opponentMove.x].groundHealth--;
 
             if (tempGrid[opponentMove.y][opponentMove.x].groundHealth <= 0) {
                 tempGrid[opponentMove.y][opponentMove.x].content = "grave";
@@ -164,6 +168,8 @@ const Game = () => {
 
         if (hostMove.x === opponentMove.x && hostMove.y === opponentMove.y) {
             tempGrid[hostMove.y][hostMove.x].content = "grave";
+            if (!groundHealthLowered)
+                tempGrid[hostMove.y][hostMove.x].groundHealth--;
         }
 
         setSelectable(tempGrid);
