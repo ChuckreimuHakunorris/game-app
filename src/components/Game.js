@@ -94,9 +94,11 @@ function GameGrid(props) {
 const Game = () => {
     const [username] = useLocalStorage("user");
 
-    const [gameState, setGameState] = useState("opening");
+    //let [gameState, setGameState] = useState("default");
 
-    const [role, setRole] = useState("host");
+    let gState = useRef("default");
+
+    let role = useRef("host");
 
     const [selectedX, setSelectedX] = useState(-1);
     const [selectedY, setSelectedY] = useState(-1);
@@ -109,15 +111,15 @@ const Game = () => {
 
     const messagesEndRef = useRef(null);
 
-    let [grid, setGrid] = useState(gameGrid);
+    let grid = useRef(gameGrid);
 
     function setGridSelected(x, y) {
         setSelectedX(x);
         setSelectedY(y);
-        let tempGrid = grid;
+        let tempGrid = grid.current;
         tempGrid[y][x].status = "selected";
         tempGrid = setOthersNotSelected(x, y, tempGrid);
-        setGrid(tempGrid);
+        grid.current = tempGrid;
     }
 
     function setOthersNotSelected(selectedX, selectedY, grid) {
@@ -134,7 +136,7 @@ const Game = () => {
     }
 
     function resolveMoves(hostMove, opponentMove) {
-        let tempGrid = grid;
+        let tempGrid = grid.current;
 
         tempGrid[hostMove.y][hostMove.x].content = "hostKnight";
         tempGrid[opponentMove.y][opponentMove.x].content = "opponentKnight";
@@ -145,16 +147,16 @@ const Game = () => {
 
         setSelectable(tempGrid);
 
-        if (getSelectableCount(tempGrid) <= 0) {
-            setGameState("main");
+        if (gState.current === "opening" && getSelectableCount(tempGrid) <= 0) {
+            gState.current = "main";
             setSelectable(tempGrid);
         }
 
-        setGrid(tempGrid);
+        grid.current = tempGrid;
     }
 
     function setSelectable(grid) {
-        switch (gameState) {
+        switch (gState.current) {
             case "opening":
                 for (var y = 0; y < grid.length; y++) {
                     for (var x = 0; x < grid[y].length; x++) {
@@ -171,7 +173,42 @@ const Game = () => {
                 }
                 return grid;
             case "main":
-                
+                for (y = 0; y < grid.length; y++) {
+                    for (x = 0; x < grid[y].length; x++) {
+                        grid[y][x].status = "unselectable";
+                    }
+                }
+                for (y = 0; y < grid.length; y++) {
+                    for (x = 0; x < grid[y].length; x++) {
+                        if (grid[y][x].content === `${role.current}Knight`) {
+                            grid[y][x].status = "selectable";
+                            if (x > 0 && y > 0)
+                                grid[y - 1][x - 1].status = "selectable";
+                            if (y > 0)
+                                grid[y - 1][x].status = "selectable";
+                            if (x < 4 && y > 0)
+                                grid[y - 1][x + 1].status = "selectable";
+                            if (x > 0)
+                                grid[y][x - 1].status = "selectable";
+                            console.log(x)
+                            if (x < 4) {
+                                console.log(x + 1);
+                                grid[y][x + 1].status = "selectable";
+                                console.log("here I am")
+                                console.log(grid[y][x + 1].status);
+                            }
+                            if (x > 0 && y < 4)
+                                grid[y + 1][x - 1].status = "selectable";
+                            if (y < 4)
+                                grid[y + 1][x].status = "selectable";
+                            if (x < 4 && y < 4)
+                                grid[y + 1][x + 1].status = "selectable";
+                        }
+                    }
+                }
+
+                setSelectedX(-1);
+                setSelectedY(-1);
                 return grid;
             default:
                 return grid;
@@ -191,39 +228,46 @@ const Game = () => {
         return selectableCount;
     }
 
+    function manualDisconnectAndReconnect() {
+        joinRoom();
+    }
+
     const joinRoom = () => {
         if (username === "WilliamDell") {
-            setRole("host");
+            role.current = "host";
         } else {
-            setRole("opponent");
+            role.current = "opponent";
         }
-
         //socket = io.connect("https://castrum-tactics.onrender.com");
         socket = io.connect("http://localhost:3500");
-        socket.emit("join_room", { room, username, role });
+        let r = role.current;
+        socket.emit("join_room", { room, username, role: r });
     }
 
     const sendMessage = () => {
-        socket.emit("send_message", { message, room, username, role });
+        const r = role.current;
+
+        socket.emit("send_message", { message, room, username, role: r });
     }
 
     const sendMove = () => {
         const x = selectedX;
         const y = selectedY;
+        const r = role.current;
 
         if (x >= 0 && y >= 0) {
             let logData = {
                 type: "send_move",
                 message: `Sending move [${x}, ${y}] to the server =>`,
-                role
+                role: r
             }
             setLog(current => [...current, logData]);
 
-            socket.emit("send_move", x, y, room, username, role, message => {
+            socket.emit("send_move", x, y, room, username, r, message => {
                 let logData = {
                     type: "send_move",
                     message: message,
-                    role
+                    role: r
                 }
                 setLog(current => [...current, logData]);
             });
@@ -233,16 +277,11 @@ const Game = () => {
     useEffect(() => {
         setSelectedX(-1);
         setSelectedY(-1);
-        setGameState("opening");
+        //setGameState("opening");
+        gState.current = "opening";
         joinRoom();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    useEffect(() => {
-        console.log("gamestate changed! It is now " + gameState);
-        setSelectable(grid);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [gameState])
 
     useEffect(() => {
         socket.on("receive_message", (data) => {
@@ -292,13 +331,13 @@ const Game = () => {
             <br />
             <div className="gameAreaContainer">
                 <div className="gridContainer">
-                    <button className="gameButton">Reconnect</button>
-                    <GameGrid grid={grid} setGridSelected={setGridSelected} />
+                    <button className="gameButton" onClick={manualDisconnectAndReconnect}>Reconnect</button>
+                    <GameGrid grid={grid.current} setGridSelected={setGridSelected} />
                     <button className="gameButton" onClick={sendMove}>Send Move</button>
                 </div>
             </div>
             <div className="gameLog">
-                <Log messages={log} username={username} role={role} />
+                <Log messages={log} username={username} role={role.current} />
                 <div ref={messagesEndRef} />
             </div>
             <input type="text" placeholder="Message..." onChange={(event) => {
