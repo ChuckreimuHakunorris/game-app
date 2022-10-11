@@ -1,6 +1,7 @@
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useEffect, useState, useRef } from "react";
 import gameGrid from "./Game/Grid";
+import getTileConnections from "./Game/GetTileConnections";
 
 import io from "socket.io-client";
 
@@ -174,6 +175,17 @@ const Game = () => {
 
         setSelectable(tempGrid);
 
+        if (gState.current === "main") {
+            tempGrid = getTileConnections(tempGrid);
+
+            for (var y = 0; y < tempGrid.length; y++) {
+                for (var x = 0; x < tempGrid[y].length; x++) {
+                    console.log("[" + x + ", " + y + "] con value: "
+                     + tempGrid[y][x].con);
+                }
+            }
+        }
+
         if (gState.current === "opening" && getSelectableCount(tempGrid) <= 0) {
             gState.current = "main";
             setSelectable(tempGrid);
@@ -218,12 +230,8 @@ const Game = () => {
                                 grid[y - 1][x + 1].status = "selectable";
                             if (x > 0)
                                 grid[y][x - 1].status = "selectable";
-                            console.log(x)
                             if (x < 4) {
-                                console.log(x + 1);
                                 grid[y][x + 1].status = "selectable";
-                                console.log("here I am")
-                                console.log(grid[y][x + 1].status);
                             }
                             if (x > 0 && y < 4)
                                 grid[y + 1][x - 1].status = "selectable";

@@ -1,4 +1,32 @@
-const grid = [
+const testGrid1 = [
+    [{ status: "unselectable", content: "empty", groundHealth: 3 },
+     { status: "unselectable", content: "empty", groundHealth: 3 },
+     { status: "selectable", content: "empty", groundHealth: 3 }, 
+     { status: "unselectable", content: "empty", groundHealth: 3 }, 
+     { status: "unselectable", content: "empty", groundHealth: 3 }],
+     [{ status: "selectable", content: "empty", groundHealth: 3 },
+     { status: "unselectable", content: "empty", groundHealth: 3 },
+     { status: "unselectable", content: "empty", groundHealth: 3 }, 
+     { status: "unselectable", content: "empty", groundHealth: 3 }, 
+     { status: "selectable", content: "empty", groundHealth: 3 }],
+     [{ status: "unselectable", content: "empty", groundHealth: 3 },
+     { status: "unselectable", content: "empty", groundHealth: 3 },
+     { status: "unselectable", content: "empty", groundHealth: 3 }, 
+     { status: "unselectable", content: "empty", groundHealth: 3 }, 
+     { status: "unselectable", content: "empty", groundHealth: 3 }],
+     [{ status: "selectable", content: "empty", groundHealth: 3 },
+     { status: "unselectable", content: "empty", groundHealth: 3 },
+     { status: "unselectable", content: "empty", groundHealth: 3 }, 
+     { status: "unselectable", content: "empty", groundHealth: 3 }, 
+     { status: "selectable", content: "empty", groundHealth: 3 }],
+     [{ status: "unselectable", content: "empty", groundHealth: 3 },
+     { status: "unselectable", content: "empty", groundHealth: 3 },
+     { status: "selectable", content: "empty", groundHealth: 3 }, 
+     { status: "unselectable", content: "empty", groundHealth: 3 }, 
+     { status: "unselectable", content: "empty", groundHealth: 3 }]
+]
+
+const testGrid2 = [
     [{ status: "unselectable", content: "empty", groundHealth: 3 },
      { status: "unselectable", content: "empty", groundHealth: 3 },
      { status: "unselectable", content: "empty", groundHealth: 3 }, 
@@ -14,11 +42,11 @@ const grid = [
      { status: "unselectable", content: "empty", groundHealth: 3 }, 
      { status: "unselectable", content: "empty", groundHealth: 3 }, 
      { status: "unselectable", content: "empty", groundHealth: 3 }],
-     [{ status: "unselectable", content: "empty", groundHealth: 3 },
-     { status: "selectable", content: "empty", groundHealth: 3 },
+     [{ status: "selectable", content: "empty", groundHealth: 3 },
+     { status: "unselectable", content: "empty", groundHealth: 3 },
      { status: "unselectable", content: "empty", groundHealth: 3 }, 
-     { status: "selectable", content: "empty", groundHealth: 3 }, 
-     { status: "unselectable", content: "empty", groundHealth: 3 }],
+     { status: "unselectable", content: "empty", groundHealth: 3 }, 
+     { status: "selectable", content: "empty", groundHealth: 3 }],
      [{ status: "unselectable", content: "empty", groundHealth: 3 },
      { status: "unselectable", content: "empty", groundHealth: 3 },
      { status: "unselectable", content: "empty", groundHealth: 3 }, 
@@ -26,4 +54,4 @@ const grid = [
      { status: "unselectable", content: "empty", groundHealth: 3 }]
 ]
 
-export default grid;
+export default testGrid2;
