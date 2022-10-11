@@ -181,13 +181,6 @@ const Game = () => {
 
         if (gState.current === "main") {
             tempGrid = getTileConnections(tempGrid);
-
-            for (var y = 0; y < tempGrid.length; y++) {
-                for (var x = 0; x < tempGrid[y].length; x++) {
-                    console.log("[" + x + ", " + y + "] con value: "
-                     + tempGrid[y][x].con);
-                }
-            }
         }
 
         setSelectable(tempGrid);
