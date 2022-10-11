@@ -138,41 +138,47 @@ const Game = () => {
         let groundHealthLowered = false;
         let tempGrid = grid.current;
 
-        if (tempGrid[hostMove.y][hostMove.x].content === "hostKnight") {
-            tempGrid[hostMove.y][hostMove.x].content = "hostCastle";
-        } else if (tempGrid[hostMove.y][hostMove.x].content === "opponentKnight") {
-            tempGrid[hostMove.y][hostMove.x].content = "hostKnight";
-            tempGrid[hostMove.y][hostMove.x].groundHealth--;
+        let hX = hostMove.x;
+        let hY = hostMove.y;
+
+        let oX = opponentMove.x;
+        let oY = opponentMove.y;
+
+        if (tempGrid[hY][hX].content === "hostKnight") {
+            tempGrid[hY][hX].content = "hostCastle";
+        } else if (tempGrid[hY][hX].content === "opponentKnight") {
+            tempGrid[hY][hX].content = "hostKnight";
+            tempGrid[hY][hX].groundHealth--;
             groundHealthLowered = true;
 
-            if (tempGrid[hostMove.y][hostMove.x].groundHealth <= 0) {
-                tempGrid[hostMove.y][hostMove.x].content = "grave";
+            if (tempGrid[hY][hX].groundHealth <= 0) {
+                tempGrid[hY][hX].content = "grave";
             }
         } else {
-            tempGrid[hostMove.y][hostMove.x].content = "hostKnight";
+            tempGrid[hY][hX].content = "hostKnight";
         }
 
-        if (tempGrid[opponentMove.y][opponentMove.x].content === "opponentKnight") {
-            tempGrid[opponentMove.y][opponentMove.x].content = "opponentCastle";
-        } else if (tempGrid[opponentMove.y][opponentMove.x].content === "hostKnight") {
-            tempGrid[opponentMove.y][opponentMove.x].content = "opponentKnight";
+        if (tempGrid[oY][oX].content === "opponentKnight") {
+            tempGrid[oY][oX].content = "opponentCastle";
+        } else if (tempGrid[oY][oX].content === "hostKnight") {
+            tempGrid[oY][oX].content = "opponentKnight";
 
-            if (hostMove.x === opponentMove.x && hostMove.y === opponentMove.y) { } else
-                tempGrid[opponentMove.y][opponentMove.x].groundHealth--;
+            if (hX === oX && hY === oY) { } else
+                tempGrid[oY][oX].groundHealth--;
 
-            if (tempGrid[opponentMove.y][opponentMove.x].groundHealth <= 0) {
-                tempGrid[opponentMove.y][opponentMove.x].content = "grave";
+            if (tempGrid[oY][oX].groundHealth <= 0) {
+                tempGrid[oY][oX].content = "grave";
             }
         } else {
-            tempGrid[opponentMove.y][opponentMove.x].content = "opponentKnight";
+            tempGrid[oY][oX].content = "opponentKnight";
         }
 
-        if (hostMove.x === opponentMove.x && hostMove.y === opponentMove.y) {
-            tempGrid[hostMove.y][hostMove.x].content = "grave";
+        if (hX === oX && hY === oY) {
+            tempGrid[hY][hX].content = "grave";
             if (!groundHealthLowered)
-                tempGrid[hostMove.y][hostMove.x].groundHealth--;
+                tempGrid[hY][hX].groundHealth--;
         }
-        
+
         if (gState.current === "main") {
             tempGrid = getTileConnections(tempGrid);
 
