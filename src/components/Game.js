@@ -172,9 +172,7 @@ const Game = () => {
             if (!groundHealthLowered)
                 tempGrid[hostMove.y][hostMove.x].groundHealth--;
         }
-
-        setSelectable(tempGrid);
-
+        
         if (gState.current === "main") {
             tempGrid = getTileConnections(tempGrid);
 
@@ -185,6 +183,8 @@ const Game = () => {
                 }
             }
         }
+
+        setSelectable(tempGrid);
 
         if (gState.current === "opening" && getSelectableCount(tempGrid) <= 0) {
             gState.current = "main";
@@ -244,8 +244,10 @@ const Game = () => {
                 }
                 for (y = 0; y < grid.length; y++) {
                     for (x = 0; x < grid[y].length; x++) {
-                        if (grid[y][x].content === "grave" || grid[y][x].content === "hostCastle"
-                            || grid[y][x].content === "opponentCastle")
+                        if (grid[y][x].content === "grave"
+                            || grid[y][x].content === "hostCastle"
+                            || grid[y][x].content === "opponentCastle"
+                            || grid[y][x].groundHealth > 3)
                             grid[y][x].status = "unselectable";
                     }
                 }

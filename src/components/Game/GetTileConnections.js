@@ -105,11 +105,21 @@ function getTileConnections(grid) {
 
     let loopCount = 0;
 
-    while (loopCount >= 1000) {
+    while (loopCount <= 1000) {
         grid = checkGrid(grid, "host");
         grid = checkGrid(grid, "opponent");
 
         loopCount++;
+    }
+
+    for (y = 0; y < grid.length; y++) {
+        for (x = 0; x < grid[y].length; x++) {
+            if (grid[y][x].con === "host") {
+                grid[y][x].groundHealth = 4;
+            } else if (grid[y][x].con === "opponent") {
+                grid[y][x].groundHealth = 5;
+            }
+        }
     }
 
     return grid;
