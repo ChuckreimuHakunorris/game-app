@@ -104,8 +104,9 @@ function getTileConnections(grid) {
     }
 
     let loopCount = 0;
-
-    while (loopCount <= 1000) {
+    let maxLoopCount = grid.length * grid[0].length;
+    
+    while (loopCount <= maxLoopCount) {
         grid = checkGrid(grid, "host");
         grid = checkGrid(grid, "opponent");
 
