@@ -37,11 +37,6 @@ const testGrid2 = [
      { status: "unselectable", content: "empty", groundHealth: 3 }, 
      { status: "unselectable", content: "empty", groundHealth: 3 }, 
      { status: "unselectable", content: "empty", groundHealth: 3 }],
-     [{ status: "unselectable", content: "empty", groundHealth: 3 },
-     { status: "unselectable", content: "empty", groundHealth: 3 },
-     { status: "unselectable", content: "empty", groundHealth: 3 }, 
-     { status: "unselectable", content: "empty", groundHealth: 3 }, 
-     { status: "unselectable", content: "empty", groundHealth: 3 }],
      [{ status: "selectable", content: "empty", groundHealth: 3 },
      { status: "unselectable", content: "empty", groundHealth: 3 },
      { status: "unselectable", content: "empty", groundHealth: 3 }, 
@@ -51,7 +46,40 @@ const testGrid2 = [
      { status: "unselectable", content: "empty", groundHealth: 3 },
      { status: "unselectable", content: "empty", groundHealth: 3 }, 
      { status: "unselectable", content: "empty", groundHealth: 3 }, 
+     { status: "unselectable", content: "empty", groundHealth: 3 }],
+     [{ status: "unselectable", content: "empty", groundHealth: 3 },
+     { status: "unselectable", content: "empty", groundHealth: 3 },
+     { status: "unselectable", content: "empty", groundHealth: 3 }, 
+     { status: "unselectable", content: "empty", groundHealth: 3 }, 
      { status: "unselectable", content: "empty", groundHealth: 3 }]
 ]
 
-export default testGrid2;
+const testGrid3 = [
+    [{ status: "unselectable", content: "solid", groundHealth: 3 },
+     { status: "unselectable", content: "solid", groundHealth: 3 },
+     { status: "unselectable", content: "solid", groundHealth: 3 }, 
+     { status: "unselectable", content: "solid", groundHealth: 3 }, 
+     { status: "unselectable", content: "solid", groundHealth: 3 }],
+     [{ status: "unselectable", content: "solid", groundHealth: 3 },
+     { status: "unselectable", content: "solid", groundHealth: 3 },
+     { status: "unselectable", content: "solid", groundHealth: 3 }, 
+     { status: "unselectable", content: "solid", groundHealth: 3 }, 
+     { status: "unselectable", content: "solid", groundHealth: 3 }],
+     [{ status: "selectable", content: "empty", groundHealth: 3 },
+     { status: "unselectable", content: "empty", groundHealth: 3 },
+     { status: "unselectable", content: "empty", groundHealth: 3 }, 
+     { status: "unselectable", content: "empty", groundHealth: 3 }, 
+     { status: "selectable", content: "empty", groundHealth: 3 }],
+     [{ status: "unselectable", content: "solid", groundHealth: 3 },
+     { status: "unselectable", content: "solid", groundHealth: 3 },
+     { status: "unselectable", content: "solid", groundHealth: 3 }, 
+     { status: "unselectable", content: "solid", groundHealth: 3 }, 
+     { status: "unselectable", content: "solid", groundHealth: 3 }],
+     [{ status: "unselectable", content: "solid", groundHealth: 3 },
+     { status: "unselectable", content: "solid", groundHealth: 3 },
+     { status: "unselectable", content: "solid", groundHealth: 3 }, 
+     { status: "unselectable", content: "solid", groundHealth: 3 }, 
+     { status: "unselectable", content: "solid", groundHealth: 3 }]
+]
+
+export default testGrid3;

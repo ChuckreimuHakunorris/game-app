@@ -246,6 +246,7 @@ const Game = () => {
                         if (grid[y][x].content === "grave"
                             || grid[y][x].content === "hostCastle"
                             || grid[y][x].content === "opponentCastle"
+                            || grid[y][x].content === "solid"
                             || grid[y][x].groundHealth > 3)
                             grid[y][x].status = "unselectable";
                     }
