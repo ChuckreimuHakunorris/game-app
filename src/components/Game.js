@@ -1,96 +1,13 @@
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useEffect, useState, useRef } from "react";
 import gameGrid from "./Game/Grid";
+import Log from "./Game/Log";
+import GameGrid from "./Game/GameGrid";
 import getTileConnections from "./Game/GetTileConnections";
 
 import io from "socket.io-client";
 
 var socket;
-
-function Log(props) {
-    const listItems = props.messages.map((message, index) => {
-        let nameColor = "gameLog_usernameOpponent";
-        if (message.role === "host") {
-            nameColor = "gameLog_usernameHost";
-        }
-
-        let moveColor = "gameLog_moveOpponent";
-        if (message.role === "host") {
-            moveColor = "gameLog_moveHost";
-        }
-
-        switch (message.type) {
-            case "chat_message":
-                return (
-                    <p key={index}>
-                        <span className={nameColor}>{message.username} </span>
-                        {/*<span className="gameLog_socketId">[{message.socketId}] </span>*/}
-                        <span className="gameLog_message">{message.message}</span>
-                    </p>)
-            case "connection_confirmation":
-                return (
-                    <p key={index}>
-                        <span className={nameColor}>{message.username} </span>
-                        {/*<span className="gameLog_socketId">[{message.socketId}] </span>*/}
-                        {message.message}
-                    </p>)
-            case "send_move":
-                return (
-                    <p key={index}>
-                        <span className={moveColor}>{message.message}</span>
-                    </p>)
-            case "receive_moves":
-                return (
-                    <p key={index}>
-                        {message.message}
-                        <span className="gameLog_moveHost"> {message.hostData} </span>
-                        <span className="gameLog_moveOpponent">{message.opponentData}</span>
-                    </p>)
-            default:
-                break;
-        }
-        return (<p>Something went wrong!</p>);
-    });
-    return (
-        <>{listItems}</>
-    );
-}
-
-function Square(props) {
-    function clickSquare() {
-        if (props.data.status === "selectable") {
-            props.setGridSelected(props.X, props.Y);
-        }
-    }
-
-    return (
-        <div key={`${props.X}-${props.Y}`} id={`square_${props.data.status}`}
-            className={`gridSquare`} onClick={clickSquare}>
-            <img src={`/game/ground_${props.data.groundHealth}.png`} className="squareSprite" alt="missing" />
-            .
-            <img src={`/game/${props.data.content}.png`} className="squareSprite" alt="missing" />
-            <img src={`/game/${props.data.status}.png`} className="squareSprite" alt="missing" />
-        </div>
-    )
-}
-
-function GameGrid(props) {
-    let grid = props.grid;
-
-    return (
-        <div className="gameGrid">
-            {grid.map((rows, index) => {
-                return (
-                    rows.map((rowItems, sIndex) => {
-                        return <Square key={`${index}-${sIndex}`} X={sIndex} Y={index}
-                            setGridSelected={props.setGridSelected}
-                            data={rowItems} />
-                    })
-                );
-            })}
-        </div>
-    );
-}
 
 const Game = () => {
     const [username] = useLocalStorage("user");
@@ -191,6 +108,11 @@ const Game = () => {
         }
 
         grid.current = tempGrid;
+
+        if (gState.current === "main" && getSelectableCount(tempGrid) <= 0) {
+            gState.current = "end";
+            sendGameEnd();
+        }
     }
 
     function setSelectable(grid) {
@@ -319,6 +241,10 @@ const Game = () => {
         }
     }
 
+    const sendGameEnd = () => {
+        socket.emit("send_game_end", { room, username, role: role.current });
+    }
+
     useEffect(() => {
         setSelectedX(-1);
         setSelectedY(-1);
@@ -331,6 +257,15 @@ const Game = () => {
     useEffect(() => {
         socket.on("receive_message", (data) => {
             data.type = "chat_message";
+            setLog(current => [...current, data]);
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    useEffect(() => {
+        socket.on("receive_game_end", (data) => {
+            data.type = "info";
+            data.message = "No more available moves. Game finished!";
             setLog(current => [...current, data]);
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps

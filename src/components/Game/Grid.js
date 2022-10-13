@@ -1,3 +1,4 @@
+ // eslint-disable-next-line
 const testGrid1 = [
     [{ status: "unselectable", content: "empty", groundHealth: 3 },
      { status: "unselectable", content: "empty", groundHealth: 3 },
@@ -26,6 +27,7 @@ const testGrid1 = [
      { status: "unselectable", content: "empty", groundHealth: 3 }]
 ]
 
+ // eslint-disable-next-line
 const testGrid2 = [
     [{ status: "unselectable", content: "empty", groundHealth: 3 },
      { status: "unselectable", content: "empty", groundHealth: 3 },
@@ -54,6 +56,7 @@ const testGrid2 = [
      { status: "unselectable", content: "empty", groundHealth: 3 }]
 ]
 
+ // eslint-disable-next-line
 const testGrid3 = [
     [{ status: "unselectable", content: "solid", groundHealth: 3 },
      { status: "unselectable", content: "solid", groundHealth: 3 },
