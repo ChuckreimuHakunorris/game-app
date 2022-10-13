@@ -27,6 +27,8 @@ const Game = () => {
 
     const messagesEndRef = useRef(null);
 
+    const messageInput = useRef(null);
+
     let grid = useRef(gameGrid);
 
     function setGridSelected(x, y) {
@@ -211,10 +213,16 @@ const Game = () => {
         socket.emit("join_room", { room, username, role: r });
     }
 
-    const sendMessage = () => {
+    const sendMessage = (e) => {
+        e.preventDefault();
+
         const r = role.current;
 
         socket.emit("send_message", { message, room, username, role: r });
+
+        setMessage("");
+        messageInput.current.value = "";
+        messageInput.current.focus();
     }
 
     const sendMove = () => {
@@ -320,10 +328,12 @@ const Game = () => {
                 <Log messages={log} username={username} role={role.current} />
                 <div ref={messagesEndRef} />
             </div>
-            <input type="text" placeholder="Message..." onChange={(event) => {
-                setMessage(event.target.value)
-            }} />
-            <button onClick={sendMessage}>Send Message</button>
+            <form onSubmit={sendMessage} className="chatInputForm">
+                <input ref={messageInput} type="text" placeholder="Message..." onChange={(event) => {
+                    setMessage(event.target.value)
+                }} />
+                <button onClick={sendMessage}>Send Message</button>
+            </form>
         </div>
     )
 }
