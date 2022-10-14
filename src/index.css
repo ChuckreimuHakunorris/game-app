@@ -254,3 +254,15 @@ button:hover {
 .gameAreaContainer {
     text-align: center;
 }
+
+.resultsContainer {
+    text-align: center;
+    background-color: rgb(3, 48, 3);
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-top: 20px;
+    border-radius: 0.25rem;
+    padding: 10px;
+    border: 2px solid black;
+}

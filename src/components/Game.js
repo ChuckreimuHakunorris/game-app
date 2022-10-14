@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import gameGrid from "./Game/Grid";
 import Log from "./Game/Log";
 import GameGrid from "./Game/GameGrid";
+import Results from "./Game/Results";
 import getTileConnections from "./Game/GetTileConnections";
 
 import io from "socket.io-client";
@@ -11,6 +12,8 @@ var socket;
 
 const Game = () => {
     const [username] = useLocalStorage("user");
+
+    const challengerName = useRef("undefined");
 
     let gState = useRef("default");
 
@@ -28,6 +31,8 @@ const Game = () => {
     const messagesEndRef = useRef(null);
 
     const messageInput = useRef(null);
+
+    const [showResults, setShowResults] = useState(false);
 
     let grid = useRef(gameGrid);
 
@@ -197,6 +202,19 @@ const Game = () => {
         return selectableCount;
     }
 
+    function getTiles(grid, role) {
+        let amount = 0;
+
+        for (var y = 0; y < grid.length; y++) {
+            for (var x = 0; x < grid[y].length; x++) {
+                if (grid[y][x].con === role)
+                    amount++;
+            }
+        }
+        
+        return amount;
+    }
+
     function manualDisconnectAndReconnect() {
         joinRoom();
     }
@@ -275,6 +293,27 @@ const Game = () => {
             data.type = "info";
             data.message = "No more available moves. Game finished!";
             setLog(current => [...current, data]);
+            setShowResults(true);
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    useEffect(() => {
+        socket.on("both_connected", (data) => {
+            data.type = "info";
+            data.message = "Both players have connected. Let the game begin!";
+            setLog(current => [...current, data]);
+
+            switch (role.current) {
+                case "host":
+                    challengerName.current = data.opponentName;
+                    break;
+                case "opponent":
+                    challengerName.current = data.hostName;
+                    break;
+                default:
+                    break;
+            }
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -324,6 +363,8 @@ const Game = () => {
                     <button className="gameButton" onClick={sendMove}>Send Move</button>
                 </div>
             </div>
+            {showResults ? <Results getTiles={getTiles} grid={grid.current} 
+                                    role={role.current} username={username} challengerName={challengerName.current} /> : null}
             <div className="gameLog">
                 <Log messages={log} username={username} role={role.current} />
                 <div ref={messagesEndRef} />
