@@ -173,7 +173,7 @@ button:hover {
 }
 
 .gameLog_moveHost {
-    color:rgb(255, 87, 137);
+    color: rgb(255, 87, 137);
 }
 
 .gameLog_usernameOpponent {
@@ -265,4 +265,38 @@ button:hover {
     border-radius: 0.25rem;
     padding: 10px;
     border: 2px solid black;
+}
+
+.topnav {
+    background-color: rgb(34, 34, 34);
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+}
+
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.topnav a.active {
+    background-color: #04AA6D;
+    color: white;
+}
+
+#title {
+    font-size: 20px;
+    font-weight: bold;
 }
