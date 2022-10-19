@@ -8,7 +8,7 @@
 
 html {
     font-family: 'Nunito', sans-serif;
-    font-size: 22px;
+    font-size: 18px;
     color: #fff;
 }
 
@@ -36,6 +36,7 @@ section {
     padding: 1rem;
     background-color: rgba(0, 0, 0, 0.4);
     border-radius: 0.5rem;
+    margin-top: 50px;
 }
 
 .inputForm {
@@ -145,6 +146,7 @@ button:hover {
     padding: 1rem;
     background-color: rgba(0, 0, 0, 0.4);
     border-radius: 0.5rem;
+    margin-top: 50px;
 }
 
 .gameLog {
@@ -303,9 +305,13 @@ button:hover {
 
 #barUsername {
     float: right;
-    color: #f2f2f2;
+    color: #00f014;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
+}
+
+#barRight {
+    float: right;
 }
