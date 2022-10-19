@@ -1,35 +1,35 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { useNavigate, useLocation } from "react-router-dom";
+//import { useNavigate, useLocation } from "react-router-dom";
 
 const Players = () => {
-    const [ players, setPlayers] = useState();
+    const [ rooms, setRooms] = useState();
     const axiosPrivate = useAxiosPrivate();
-    const navigate = useNavigate();
-    const location = useLocation();
+    //const navigate = useNavigate();
+    //const location = useLocation();
 
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
 
-        const getPlayers = async() => {
+        const getRooms = async() => {
             try {
-                const response = await axiosPrivate.get("/players", {
+                const response = await axiosPrivate.get("/rooms", {
                     signal: controller.signal
                 });
 
-                const userNames = response.data.map(player => player.username);
+                const ids = response.data.map(room => room._id);
 
                 console.log(response.data);
 
-                isMounted && setPlayers(userNames);
+                isMounted && setRooms(ids);
             } catch (err) {
                 console.error(err);
-                navigate("/login", { state: { from: location }, replace: true});
+                //navigate("/login", { state: { from: location }, replace: true});
             }
         }
 
-        getPlayers();
+        getRooms();
 
         return () => {
             isMounted = false;
@@ -41,15 +41,14 @@ const Players = () => {
 
     return (
         <article>
-            <h2>Players List</h2>
-            {players?.length
+            {rooms?.length
                 ? (
                     <ul style={{ listStyle: "none" }}>
-                        {players.map((player, i) => <li key={i}>
-                            {player}
+                        {rooms.map((room, i) => <li key={i}>
+                            {room}
                         </li>)}
                     </ul>
-                ) : <p>No players to display.</p>
+                ) : <p>No rooms to display.</p>
             }
         </article>
     )

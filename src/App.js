@@ -7,6 +7,7 @@ import Missing from "./components/Missing";
 import Admin from "./components/Admin";
 import Game from "./components/Game";
 import LinkPage from "./components/LinkPage";
+import RoomList from "./components/RoomList";
 
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
@@ -27,6 +28,7 @@ function App() {
                     <Route element={<RequireAuth allowedRoles={[1000]} />}>
                         <Route path="/" element={<Home />} />
                         <Route path="game" element={<Game />} />
+                        <Route path="rooms" element={<RoomList />} />
                     </Route>
                     
                     <Route element={<RequireAuth allowedRoles={[9000]} />}>
