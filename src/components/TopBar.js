@@ -24,7 +24,7 @@ const TopBar = () => {
             <Link to="/" id="title">Castrum Tactics</Link>
             <Link to="/game">Game</Link>
             <Link to="/admin">Admin</Link>
-            <Link to="/rooms">Room List</Link>
+            <Link to="/rooms">Rooms</Link>
             {decoded
                 ? (<>
                     <Link id="barRight" onClick={signOut}>Logout</Link>

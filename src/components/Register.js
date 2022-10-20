@@ -86,14 +86,14 @@ function Register() {
     return (
         <>
             {success ? (
-                <section>
+                <section id="specialFormContainer">
                     <h1>Success!</h1>
                     <p>
                         <Link to="/login">Sign In</Link>
                     </p>
                 </section>
             ) : (
-                <section>
+                <section id="specialFormContainer">
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <h1>Register</h1>
                     <form onSubmit={handleSubmit} className="inputForm">
