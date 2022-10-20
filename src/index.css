@@ -72,8 +72,13 @@ button {
 }
 
 button:hover {
-    background-color: gray;
+    background-color: rgb(18, 214, 51);
     transition-duration: 0.2s;
+}
+
+button:active {
+    background-color: rgb(8, 97, 23);
+    transition-duration: 0.02s;
 }
 
 .instructions {
@@ -293,8 +298,8 @@ button:hover {
     color: black;
 }
 
-.topnav a.active {
-    background-color: #04AA6D;
+.topnav a:active {
+    background-color: #048319;
     color: white;
 }
 

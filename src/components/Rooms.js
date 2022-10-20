@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 //import { useNavigate, useLocation } from "react-router-dom";
 
-const Players = () => {
+const Rooms = () => {
     const [ rooms, setRooms] = useState();
     const axiosPrivate = useAxiosPrivate();
     //const navigate = useNavigate();
@@ -18,11 +18,11 @@ const Players = () => {
                     signal: controller.signal
                 });
 
-                const ids = response.data.map(room => room._id);
+                const rooms = response.data.map(room => room);
 
                 console.log(response.data);
 
-                isMounted && setRooms(ids);
+                isMounted && setRooms(rooms);
             } catch (err) {
                 console.error(err);
                 //navigate("/login", { state: { from: location }, replace: true});
@@ -45,7 +45,7 @@ const Players = () => {
                 ? (
                     <ul style={{ listStyle: "none" }}>
                         {rooms.map((room, i) => <li key={i}>
-                            {room}
+                            {room._id + " - " + room.roomname }
                         </li>)}
                     </ul>
                 ) : <p>No rooms to display.</p>
@@ -54,4 +54,4 @@ const Players = () => {
     )
 }
 
-export default Players;
+export default Rooms;
