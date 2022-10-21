@@ -1,5 +1,6 @@
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useEffect, useState, useRef } from "react";
+import { useParams } from 'react-router-dom';
 import gameGrid from "./Game/Grid";
 import Log from "./Game/Log";
 import GameGrid from "./Game/GameGrid";
@@ -14,6 +15,8 @@ const Game = () => {
     const [username] = useLocalStorage("user");
 
     const challengerName = useRef("undefined");
+
+    const { id } = useParams();
 
     let gState = useRef("default");
 
@@ -225,6 +228,9 @@ const Game = () => {
         } else {
             role.current = "opponent";
         }
+
+        console.log(id);
+
         //socket = io.connect("https://castrum-tactics.onrender.com");
         socket = io.connect("http://localhost:3500");
         let r = role.current;
@@ -276,6 +282,7 @@ const Game = () => {
         setSelectedY(-1);
         //setGameState("opening");
         gState.current = "opening";
+
         joinRoom();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

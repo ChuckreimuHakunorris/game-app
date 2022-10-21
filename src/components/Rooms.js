@@ -45,7 +45,7 @@ const Rooms = () => {
                 ? (
                     <ul style={{ listStyle: "none" }}>
                         {rooms.map((room, i) => <li key={i}>
-                            {room._id + " - " + room.roomname }
+                            {room._id + " - " + room.roomname + " - " + room.hostname }
                         </li>)}
                     </ul>
                 ) : <p>No rooms to display.</p>

@@ -29,6 +29,7 @@ function App() {
                         <Route path="/" element={<Home />} />
                         <Route path="game" element={<Game />} />
                         <Route path="rooms" element={<RoomList />} />
+                        <Route path="rooms/:id" element={<Game />} />
                     </Route>
                     
                     <Route element={<RequireAuth allowedRoles={[9000]} />}>
