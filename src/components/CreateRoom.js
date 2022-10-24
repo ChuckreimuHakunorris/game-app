@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { useNavigate } from "react-router-dom";
 
 const CreateRoom = (props) => {
     const [roomName, setRoomName] = useState("");
     const [user] = useLocalStorage("user");
 
     const axiosPrivate = useAxiosPrivate();
+    const navigate = useNavigate();
 
     const createRoom = async (e) => {
         e.preventDefault();
@@ -19,10 +21,9 @@ const CreateRoom = (props) => {
         try {
             const room = { roomname: roomName, hostname: user, hostID: "gsegi23o4gn34iogh34ni" };
 
-            // eslint-disable-next-line no-unused-vars
             const response = await axiosPrivate.post("/rooms", room);
 
-            console.log(response.data._id);
+            navigate(`/rooms/${response.data._id}`);
 
         } catch (err) {
             console.log(err);

@@ -6,6 +6,7 @@ import Log from "./Game/Log";
 import GameGrid from "./Game/GameGrid";
 import Results from "./Game/Results";
 import getTileConnections from "./Game/GetTileConnections";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 import io from "socket.io-client";
 
@@ -16,7 +17,7 @@ const Game = () => {
 
     const challengerName = useRef("undefined");
 
-    const { id } = useParams();
+    let { id } = useParams();
 
     let gState = useRef("default");
 
@@ -38,6 +39,8 @@ const Game = () => {
     const [showResults, setShowResults] = useState(false);
 
     let grid = useRef(gameGrid);
+
+    const axiosPrivate = useAxiosPrivate();
 
     function setGridSelected(x, y) {
         setSelectedX(x);
@@ -234,7 +237,8 @@ const Game = () => {
         //socket = io.connect("https://castrum-tactics.onrender.com");
         socket = io.connect("http://localhost:3500");
         let r = role.current;
-        socket.emit("join_room", { room, username, role: r });
+
+        socket.emit("join_room", { room: id, username, role: r });
     }
 
     const sendMessage = (e) => {
@@ -242,7 +246,7 @@ const Game = () => {
 
         const r = role.current;
 
-        socket.emit("send_message", { message, room, username, role: r });
+        socket.emit("send_message", { message, room: id, username, role: r });
 
         setMessage("");
         messageInput.current.value = "";
@@ -262,7 +266,9 @@ const Game = () => {
             }
             setLog(current => [...current, logData]);
 
-            socket.emit("send_move", x, y, room, username, r, message => {
+            let rm = id;
+
+            socket.emit("send_move", x, y, rm, username, r, message => {
                 let logData = {
                     type: "send_move",
                     message: message,
@@ -274,7 +280,7 @@ const Game = () => {
     }
 
     const sendGameEnd = () => {
-        socket.emit("send_game_end", { room, username, role: role.current });
+        socket.emit("send_game_end", { room: id, username, role: role.current });
     }
 
     useEffect(() => {

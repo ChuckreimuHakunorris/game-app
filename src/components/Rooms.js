@@ -19,9 +19,7 @@ const Rooms = () => {
                 });
 
                 const rooms = response.data.map(room => room);
-
-                console.log(response.data);
-
+                
                 isMounted && setRooms(rooms);
             } catch (err) {
                 console.error(err);
