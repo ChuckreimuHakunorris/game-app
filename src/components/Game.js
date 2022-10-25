@@ -365,9 +365,7 @@ const Game = () => {
 
     return (
         <div className="gameContainer">
-            <h1>Game</h1>
-            <br />
-            <p>You are logged in as {username}</p>
+            <h1>Room Name</h1>
             <br />
             <div className="gameAreaContainer">
                 <div className="gridContainer">

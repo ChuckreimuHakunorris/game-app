@@ -9,7 +9,7 @@ const TopBar = () => {
     const [user] = useLocalStorage("user");
     const { auth } = useAuth();
     const logout = useLogout();
-
+    
     const decoded = auth?.accessToken
         ? jwtDecode(auth.accessToken)
         : undefined;
