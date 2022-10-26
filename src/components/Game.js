@@ -21,14 +21,14 @@ const Game = () => {
 
     let gState = useRef("default");
 
-    let role = useRef("host");
+    let gameRole = useRef("default");
 
     const [selectedX, setSelectedX] = useState(-1);
     const [selectedY, setSelectedY] = useState(-1);
 
-    const room = 1;
-
     const [message, setMessage] = useState("");
+
+    const [roomName, setRoomName] = useState("Room Name");
 
     const [log, setLog] = useState([]);
 
@@ -153,8 +153,8 @@ const Game = () => {
                 }
                 for (y = 0; y < grid.length; y++) {
                     for (x = 0; x < grid[y].length; x++) {
-                        if (grid[y][x].content === `${role.current}Knight`
-                            || grid[y][x].content === `${role.current}Castle`) {
+                        if (grid[y][x].content === `${gameRole.current}Knight`
+                            || grid[y][x].content === `${gameRole.current}Castle`) {
                             grid[y][x].status = "selectable";
                             if (x > 0 && y > 0)
                                 grid[y - 1][x - 1].status = "selectable";
@@ -226,25 +226,16 @@ const Game = () => {
     }
 
     const joinRoom = () => {
-        if (username === "WilliamDell") {
-            role.current = "host";
-        } else {
-            role.current = "opponent";
-        }
-
-        console.log(id);
-
         //socket = io.connect("https://castrum-tactics.onrender.com");
         socket = io.connect("http://localhost:3500");
-        let r = role.current;
 
-        socket.emit("join_room", { room: id, username, role: r });
+        socket.emit("join_room", { room: id, username });
     }
 
     const sendMessage = (e) => {
         e.preventDefault();
 
-        const r = role.current;
+        const r = gameRole.current;
 
         socket.emit("send_message", { message, room: id, username, role: r });
 
@@ -256,23 +247,23 @@ const Game = () => {
     const sendMove = () => {
         const x = selectedX;
         const y = selectedY;
-        const r = role.current;
+        const role = gameRole.current;
 
         if (x >= 0 && y >= 0) {
             let logData = {
                 type: "send_move",
                 message: `Sending move [${x}, ${y}] to the server =>`,
-                role: r
+                role
             }
             setLog(current => [...current, logData]);
 
             let rm = id;
 
-            socket.emit("send_move", x, y, rm, username, r, message => {
+            socket.emit("send_move", x, y, rm, username, role, message => {
                 let logData = {
                     type: "send_move",
                     message: message,
-                    role: r
+                    role
                 }
                 setLog(current => [...current, logData]);
             });
@@ -280,14 +271,34 @@ const Game = () => {
     }
 
     const sendGameEnd = () => {
-        socket.emit("send_game_end", { room: id, username, role: role.current });
+        socket.emit("send_game_end", { room: id, username, role: gameRole.current });
     }
 
     useEffect(() => {
         setSelectedX(-1);
         setSelectedY(-1);
-        //setGameState("opening");
+
         gState.current = "opening";
+
+        const getRoom = async () => {
+            try {
+                const response = await axiosPrivate.get(`rooms/${id}`);
+
+                const room = response.data;
+
+                setRoomName(room.roomname);
+                
+                if (room.hostname === username) {
+                    gameRole.current = "host";
+                } else {
+                    gameRole.current = "opponent";
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        getRoom();
 
         joinRoom();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -317,7 +328,7 @@ const Game = () => {
             data.message = "Both players have connected. Let the game begin!";
             setLog(current => [...current, data]);
 
-            switch (role.current) {
+            switch (gameRole.current) {
                 case "host":
                     challengerName.current = data.opponentName;
                     break;
@@ -350,6 +361,7 @@ const Game = () => {
         socket.on("confirm_connection", (data) => {
             data.type = "connection_confirmation";
             data.message = " connected to the room.";
+
             setLog(current => [...current, data]);
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -365,7 +377,7 @@ const Game = () => {
 
     return (
         <div className="gameContainer">
-            <h1>Room Name</h1>
+            <h1>{roomName}</h1>
             <br />
             <div className="gameAreaContainer">
                 <div className="gridContainer">
@@ -375,9 +387,9 @@ const Game = () => {
                 </div>
             </div>
             {showResults ? <Results getTiles={getTiles} grid={grid.current} 
-                                    role={role.current} username={username} challengerName={challengerName.current} /> : null}
+                                    role={gameRole.current} username={username} challengerName={challengerName.current} /> : null}
             <div className="gameLog">
-                <Log messages={log} username={username} role={role.current} />
+                <Log messages={log} username={username} role={gameRole.current} />
                 <div ref={messagesEndRef} />
             </div>
             <form onSubmit={sendMessage} className="chatInputForm">
