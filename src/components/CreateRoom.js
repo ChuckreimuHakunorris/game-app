@@ -19,7 +19,7 @@ const CreateRoom = (props) => {
         }
 
         try {
-            const room = { roomname: roomName, hostname: user, hostID: "gsegi23o4gn34iogh34ni" };
+            const room = { roomname: roomName, hostname: user };
 
             const response = await axiosPrivate.post("/rooms", room);
 

@@ -1,11 +1,33 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { useNavigate } from "react-router-dom";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 function Room(props) {
+    const [user] = useLocalStorage("user");
+
     const navigate = useNavigate();
+    const axiosPrivate = useAxiosPrivate();
 
     function joinRoom() {
+        const editRoom = async () => {
+            try {
+                const response = await axiosPrivate.put("/rooms", {
+                    id: props.room._id,
+                    opponent_name: user
+                });
+
+                const room = response.data;
+
+                console.log(room);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        if (props.room.hostname !== user)
+            editRoom();
+        
         navigate(`/rooms/${props.room._id}`);
     }
 
