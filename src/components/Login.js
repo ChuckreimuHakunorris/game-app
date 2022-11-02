@@ -21,6 +21,10 @@ const Login = () => {
 
     const [check, toggleCheck] = useToggle("persist", false);
 
+    if (user === "DEFAULT_VALUE") {
+        resetUser();
+    }
+
     useEffect(() => {
         userRef.current.focus();
     }, [])
@@ -48,6 +52,8 @@ const Login = () => {
             setPwd("");
 
             navigate("/");
+
+            window.location.reload(true);
         } catch (err) {
 
             if (err?.response?.status === 0) {

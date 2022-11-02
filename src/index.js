@@ -13,6 +13,10 @@ if (process.env.NODE_ENV === 'production') {
 const container = document.getElementById('root');
 const root = createRoot(container);
 
+if (!window.localStorage.getItem("user") || window.localStorage.getItem("user") === undefined) {
+    window.localStorage.setItem("user", JSON.stringify("DEFAULT_VALUE"));
+}
+
 root.render(
     <BrowserRouter>
         <AuthProvider>
