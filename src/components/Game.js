@@ -217,7 +217,7 @@ const Game = () => {
                     amount++;
             }
         }
-        
+
         return amount;
     }
 
@@ -226,8 +226,10 @@ const Game = () => {
     }
 
     const joinRoom = () => {
-        //socket = io.connect("https://castrum-tactics.onrender.com");
-        socket = io.connect("http://localhost:3500");
+        if (process.env.NODE_ENV === "development")
+            socket = io.connect("http://localhost:3500");
+        else
+            socket = io.connect("https://castrum-tactics.onrender.com");
 
         socket.emit("join_room", { room: id, username });
     }
@@ -287,7 +289,7 @@ const Game = () => {
                 const room = response.data;
 
                 setRoomName(room.roomname);
-                
+
                 if (room.hostname === username) {
                     gameRole.current = "host";
                 } else {
@@ -386,8 +388,8 @@ const Game = () => {
                     <button className="gameButton" onClick={sendMove}>Send Move</button>
                 </div>
             </div>
-            {showResults ? <Results getTiles={getTiles} grid={grid.current} 
-                                    role={gameRole.current} username={username} challengerName={challengerName.current} /> : null}
+            {showResults ? <Results getTiles={getTiles} grid={grid.current}
+                role={gameRole.current} username={username} challengerName={challengerName.current} /> : null}
             <div className="gameLog">
                 <Log messages={log} username={username} role={gameRole.current} />
                 <div ref={messagesEndRef} />
