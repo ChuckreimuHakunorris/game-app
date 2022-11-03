@@ -22,9 +22,9 @@ const TopBar = () => {
     return (
         <div className="topnav">
             <Link to="/" id="title">Castrum Tactics</Link>
-            <Link to="/game">Game</Link>
-            <Link to="/admin">Admin</Link>
+            <Link to="/profile">Profile</Link>
             <Link to="/rooms">Rooms</Link>
+            <Link to="/players">Players</Link>
             {decoded
                 ? (<>
                     <Link id="barRight" onClick={signOut}>Logout</Link>
