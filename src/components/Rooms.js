@@ -19,7 +19,6 @@ function Room(props) {
 
                 const room = response.data;
 
-                console.log(room);
             } catch (err) {
                 console.error(err);
             }

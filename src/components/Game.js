@@ -330,15 +330,10 @@ const Game = () => {
             data.message = "Both players have connected. Let the game begin!";
             setLog(current => [...current, data]);
 
-            switch (gameRole.current) {
-                case "host":
-                    challengerName.current = data.opponentName;
-                    break;
-                case "opponent":
-                    challengerName.current = data.hostName;
-                    break;
-                default:
-                    break;
+            if (gameRole.current === "host") {
+                challengerName.current = data.opponentName;
+            } else {
+                challengerName.current = data.hostName;
             }
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
