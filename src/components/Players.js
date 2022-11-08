@@ -40,8 +40,9 @@ const Players = () => {
     }, [])
 
     return (
-        <article>
+        <section>
             <h2>Players List</h2>
+            <br/>
             {players?.length
                 ? (
                     <ul style={{ listStyle: "none" }}>
@@ -51,7 +52,7 @@ const Players = () => {
                     </ul>
                 ) : <p>No players to display.</p>
             }
-        </article>
+        </section>
     )
 }
 
