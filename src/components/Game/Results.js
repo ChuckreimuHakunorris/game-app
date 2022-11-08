@@ -11,7 +11,6 @@ function Results(props) {
     let opponentName = "undefined";
 
     let username = props.username;
-    let role = props.role;
 
     switch (props.role) {
         case "host":
@@ -87,8 +86,6 @@ function Results(props) {
         }
 
         getPlayer();
-
-        console.log("use effect in results");
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
