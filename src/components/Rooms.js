@@ -18,6 +18,7 @@ function Room(props) {
                 });
 
                 const room = response.data;
+                console.log(room);
 
             } catch (err) {
                 console.error(err);
@@ -81,7 +82,6 @@ const Rooms = () => {
                     <ul style={{ listStyle: "none" }}>
                         {rooms.map((room, i) => <li key={i}>
                             <Room room={room} />
-
                         </li>)}
                     </ul>
                 ) : <p>No rooms to display.</p>
