@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const CreateRoom = (props) => {
     const [roomName, setRoomName] = useState("");
+    const [stage, setStage] = useState("Plains");
     const [user] = useLocalStorage("user");
 
     const axiosPrivate = useAxiosPrivate();
@@ -19,7 +20,7 @@ const CreateRoom = (props) => {
         }
 
         try {
-            const room = { roomname: roomName, hostname: user };
+            const room = { roomname: roomName, hostname: user, stage };
 
             const response = await axiosPrivate.post("/rooms", room);
 
@@ -40,11 +41,28 @@ const CreateRoom = (props) => {
             <form onSubmit={createRoom}>
                 <h1>Create New Room</h1>
                 <br />
-                Room name:&nbsp;&nbsp;<input type="text" placeholder="Room name..."
+                <label for="room-name">Room name:&nbsp;&nbsp;</label>
+                <input type="text" name="room-name" placeholder="Room name..."
                     onChange={(e) => setRoomName(e.target.value)} required
                     defaultValue={`${user}'s Room`}></input>
                 <br />
-                <button>Create Room</button>
+                <br />
+                <label for="stage-select">Select stage:&nbsp;&nbsp;</label>
+                <select name="stage-select" id="stage-select" onChange={(e) => setStage(e.target.value)}>
+                    <option value="Plains">Plains</option>
+                    <option value="Rocks">Rocks</option>
+                    <option value="Test 1">Test 1</option>
+                    <option value="Test 2">Test 2</option>
+                </select>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <div id="create-room-button-container">
+                    <button id="create-room-button">Create Room</button>
+                </div>
             </form>
         </section>
     )

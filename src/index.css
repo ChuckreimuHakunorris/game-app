@@ -341,3 +341,23 @@ button:active {
     margin: 5px 5px 0px 0px;
     font-size: 18px;
 }
+
+#stage-select {
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    width: 200px;
+    height: 40px;
+}
+
+#create-room-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#create-room-button {
+
+    margin: 5px 5px 0px 0px;
+}

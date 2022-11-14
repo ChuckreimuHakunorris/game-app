@@ -35,7 +35,7 @@ function Room(props) {
         <div className="roomDiv">
             <b>{props.room.roomname}</b><button onClick={joinRoom}
                 id="joinRoomButton">Join Room</button><br />
-            Host: {props.room.hostname}
+            Host: {props.room.hostname}&emsp;&emsp;&emsp;Stage: {props.room.stage}
         </div>
     )
 }
