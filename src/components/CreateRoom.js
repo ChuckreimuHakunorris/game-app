@@ -41,13 +41,13 @@ const CreateRoom = (props) => {
             <form onSubmit={createRoom}>
                 <h1>Create New Room</h1>
                 <br />
-                <label for="room-name">Room name:&nbsp;&nbsp;</label>
+                <label htmlFor="room-name">Room name:&nbsp;&nbsp;</label>
                 <input type="text" name="room-name" placeholder="Room name..."
                     onChange={(e) => setRoomName(e.target.value)} required
                     defaultValue={`${user}'s Room`}></input>
                 <br />
                 <br />
-                <label for="stage-select">Select stage:&nbsp;&nbsp;</label>
+                <label htmlFor="stage-select">Select stage:&nbsp;&nbsp;</label>
                 <select name="stage-select" id="stage-select" onChange={(e) => setStage(e.target.value)}>
                     <option value="Plains">Plains</option>
                     <option value="Rocks">Rocks</option>

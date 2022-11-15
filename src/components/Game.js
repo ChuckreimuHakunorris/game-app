@@ -1,7 +1,7 @@
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useEffect, useState, useRef } from "react";
 import { useParams } from 'react-router-dom';
-import gameGrid from "./Game/Grid";
+import stages from "./Game/Stages";
 import Log from "./Game/Log";
 import GameGrid from "./Game/GameGrid";
 import Results from "./Game/Results";
@@ -38,9 +38,17 @@ const Game = () => {
 
     const [showResults, setShowResults] = useState(false);
 
-    let grid = useRef(gameGrid);
+    let grid = useRef(stages[0].grid);
 
     const axiosPrivate = useAxiosPrivate();
+
+    function getStage(stageName) {
+        for (let i = 0 ; i < stages.length; i++) {
+            if (stages[i].name === stageName) {
+                return stages[i].grid;
+            }
+        }
+    }
 
     function setGridSelected(x, y) {
         setSelectedX(x);
@@ -289,6 +297,8 @@ const Game = () => {
                 const room = response.data;
 
                 setRoomName(room.roomname);
+                
+                grid.current = getStage(room.stage);
 
                 if (room.hostname === username) {
                     gameRole.current = "host";
