@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useNavigate } from "react-router-dom";
 
 function Results(props) {
     const axiosPrivate = useAxiosPrivate();
+
+    const navigate = useNavigate();
 
     let hostTiles = props.getTiles(props.grid, "host");
     let opponentTiles = props.getTiles(props.grid, "opponent");
@@ -39,6 +42,11 @@ function Results(props) {
     } else if (result < 0) {
         winner = opponentName;
         winnerColor = "gameLog_usernameOpponent";
+    }
+
+    function exitGame() {
+        props.socket.disconnect();
+        navigate("/rooms");
     }
 
     useEffect(() => {
@@ -93,10 +101,12 @@ function Results(props) {
         Game Finished!<br /><br />
         Winner<br />
         <span className={winnerColor}>{winner}</span><br /><br />
-        <span className="gameLog_usernameHost">{hostName}</span>:
-        <span className="gameLog_moveHost"> {hostTiles}</span> -
-        <span className="gameLog_usernameOpponent"> {opponentName}</span>:
-        <span className="gameLog_moveOpponent"> {opponentTiles}</span>
+        <span className="gameLog_usernameHost">{hostName} </span>:
+        <span className="gameLog_moveHost"> {hostTiles} </span> -
+        <span className="gameLog_usernameOpponent"> {opponentName} </span>:
+        <span className="gameLog_moveOpponent"> {opponentTiles} </span>
+        <br />
+        <button onClick={exitGame}>&emsp;&emsp;OK&emsp;&emsp;</button>
     </div>)
 }
 
