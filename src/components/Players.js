@@ -1,11 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { useNavigate, useLocation } from "react-router-dom";
 
 function Player(props) {
+    const infoRef = useRef();
+
+    function toggleShow() {
+        const wrapper = infoRef.current;
+        wrapper.classList.toggle("is-open");
+    }
+
     return (
-        <div className="roomDiv">
+        <div ref={infoRef} className="playerDiv" onClick={toggleShow}>
             <b>{props.player.username}</b>
+            <div>
+                <br />
+                <p>Games Played: {props.player.games_played}</p>
+                <br />
+                <p>Wins: {props.player.wins}</p>
+                <p>Draws: {props.player.draws}</p>
+                <p>Losses: {props.player.losses}</p>
+            </div>
         </div>
     )
 }
