@@ -393,7 +393,7 @@ const Game = () => {
                     <button className="gameButton" onClick={sendMove}>Send Move</button>
                 </div>
             </div>
-            {showResults ? <Results getTiles={getTiles} grid={grid.current} socket={socket}
+            {showResults ? <Results getTiles={getTiles} grid={grid.current} socket={socket} id={id}
                 role={gameRole.current} username={username} challengerName={challengerName.current} /> : null}
             <div className="gameLog">
                 <Log messages={log} username={username} role={gameRole.current} />

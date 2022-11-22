@@ -15,6 +15,8 @@ function Results(props) {
 
     let username = props.username;
 
+    let id = props.id;
+
     switch (props.role) {
         case "host":
             hostName = props.username;
@@ -46,7 +48,22 @@ function Results(props) {
 
     function exitGame() {
         props.socket.disconnect();
-        navigate("/rooms");
+
+        const deleteRoom = async () => {
+            try {
+                const response = await axiosPrivate.delete("/rooms", {
+                    data: { id }
+                });
+
+                console.log(response);
+
+                navigate("/rooms");
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        deleteRoom();
     }
 
     useEffect(() => {
