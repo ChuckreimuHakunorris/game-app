@@ -33,7 +33,6 @@ const PersistLogin = () => {
     useEffect(() => {
         //console.log(`isLoading: ${isLoading}`);
         //console.log(`aT: ${JSON.stringify(auth?.accessToken)}`);
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoading])
 

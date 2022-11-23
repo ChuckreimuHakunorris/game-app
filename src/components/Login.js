@@ -50,10 +50,9 @@ const Login = () => {
             setAuth({ user, accessToken });
             resetUser();
             setPwd("");
-
             navigate("/");
 
-            window.location.reload(true);
+            //window.location.reload(true);
         } catch (err) {
 
             if (err?.response?.status === 0) {
