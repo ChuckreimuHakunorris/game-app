@@ -8,6 +8,8 @@ import Results from "./Game/Results";
 import getTileConnections from "./Game/GetTileConnections";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
+import stagesData from "./Game/stages.json";
+
 import io from "socket.io-client";
 
 var socket;
@@ -41,6 +43,10 @@ const Game = () => {
     let grid = useRef(stages[0].grid);
 
     const axiosPrivate = useAxiosPrivate();
+
+    function parseStage(stageData) {
+        
+    }
 
     function getStage(stageName) {
         for (let i = 0 ; i < stages.length; i++) {
