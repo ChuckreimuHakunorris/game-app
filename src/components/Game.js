@@ -1,7 +1,6 @@
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useEffect, useState, useRef } from "react";
 import { useParams } from 'react-router-dom';
-import stages from "./Game/Stages";
 import Log from "./Game/Log";
 import GameGrid from "./Game/GameGrid";
 import Results from "./Game/Results";
@@ -40,20 +39,38 @@ const Game = () => {
 
     const [showResults, setShowResults] = useState(false);
 
-    let grid = useRef(stages[0].grid);
+    let grid = useRef(parseStage("Plains"));
 
     const axiosPrivate = useAxiosPrivate();
+    
+    function parseStage(stageName) {
+        let stageGrid = [];
 
-    function parseStage(stageData) {
-        
-    }
+        let stageArray = stagesData[stageName];
 
-    function getStage(stageName) {
-        for (let i = 0 ; i < stages.length; i++) {
-            if (stages[i].name === stageName) {
-                return stages[i].grid;
+        let tile = 0;
+        let side = Math.sqrt(stagesData[stageName].length);
+
+        for (let i = 0; i < side; i++) {
+            let row = [];
+
+            for (let j = 0; j < side; j++) {
+                let t = { status: "unselectable", content: "empty", groundHealth: 3 };
+
+                if (stageArray[tile] === 1)
+                    t.status = "selectable";
+
+                if (stageArray[tile] === 2)
+                    t.content = "solid";
+
+                row.push(t);
+                tile++;
             }
+
+            stageGrid.push(row);
         }
+
+        return stageGrid;
     }
 
     function setGridSelected(x, y) {
@@ -303,8 +320,8 @@ const Game = () => {
                 const room = response.data;
 
                 setRoomName(room.roomname);
-                
-                grid.current = getStage(room.stage);
+
+                grid.current = parseStage(room.stage);
 
                 if (room.hostname === username) {
                     gameRole.current = "host";

@@ -3,6 +3,8 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
 
+import stagesData from "./Game/stages.json";
+
 const CreateRoom = (props) => {
     const [roomName, setRoomName] = useState("");
     const [stage, setStage] = useState("Plains");
@@ -10,7 +12,7 @@ const CreateRoom = (props) => {
 
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
-
+    
     const createRoom = async (e) => {
         e.preventDefault();
 
@@ -49,10 +51,9 @@ const CreateRoom = (props) => {
                 <br />
                 <label htmlFor="stage-select">Select stage:&nbsp;&nbsp;</label>
                 <select name="stage-select" id="stage-select" onChange={(e) => setStage(e.target.value)}>
-                    <option value="Plains">Plains</option>
-                    <option value="Rocks">Rocks</option>
-                    <option value="Test 1">Test 1</option>
-                    <option value="Test 2">Test 2</option>
+                        {Object.keys(stagesData).map((stage, i) =>
+                            <option value={stage} key={i}>{stage}</option>
+                        )}
                 </select>
                 <br />
                 <br />
