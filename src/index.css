@@ -377,6 +377,10 @@ button:active {
 }
 
 #create-room-button {
-
     margin: 5px 5px 0px 0px;
+}
+
+.examplePicContainer {
+    align-items: center;
+    text-align: center;
 }
