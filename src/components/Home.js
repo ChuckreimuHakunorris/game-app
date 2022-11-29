@@ -3,9 +3,22 @@ const Home = () => {
         <section>
             <h2>Castrum Tactics</h2>
             <br />
+            <h3>Introduction</h3>
+            <br />
             <p>Castrum Tactics is an exciting strategy game where a good game plan and
                 reading your opponents mindset are key to victory. If you're new here, this
                 page will serve as a guide to get you started!
+            </p>
+            <br />
+            <h3>Overview</h3>
+            <br />
+            <div className="examplePicContainer">
+                <img src={"/img/example3.png"} alt="missing" />
+            </div>
+            <br />
+            <p>Castrum Tactics is played on a 5*5 grid of squares. Players place knights on the board
+                one at a time, which can be further upgraded into castles, making them stronger. The object
+                of the game is to control more squares on the board by the end of the game than your opponent.
             </p>
             <br />
             <h2>How to Play</h2>
@@ -58,15 +71,44 @@ const Home = () => {
             <h3>Main Phase</h3>
             <br />
             <p>After all starting squares have been selected, the Main Phase starts. This is
-                where the principal gameplay takes place, the goal of which is to control more
-                squares than your opponent by the end of the game.
+                where the principal gameplay takes place.
             </p>
             <br />
             <div className="examplePicContainer">
                 <img src={"/img/example2.png"} alt="missing" />
             </div>
             <br />
-            <p>The squares around, and containing, your knights become selectable.</p>
+            <p>The squares around, and containing, your knights become selectable. A number of things
+                can happen when playing into a square in the Main Phase, so let's look at them one by one.
+            </p>
+            <br />
+            <div className="examplePicContainer">
+                <img src={"/img/move1_1.png"} alt="missing" />
+                <img src={"/img/arrow.png"} className="arrow" alt="missing" />
+                <img src={"/img/move1_2.png"} alt="missing" />
+            </div>
+            <br />
+            <p><b>Case 1:</b> When playing into an empty square, you gain a new knight in that square.</p>
+            <br />
+            <div className="examplePicContainer">
+                <img src={"/img/move2_1.png"} alt="missing" />
+                <img src={"/img/arrow.png"} className="arrow" alt="missing" />
+                <img src={"/img/move2_2.png"} alt="missing" />
+            </div>
+            <br />
+            <p><b>Case 2:</b> When playing into a square containing an enemy knight, your knight is placed in that
+            square and you gain control of it. You may notice the ground of that square changed color; we'll
+            get back to that later in the guide.</p>
+            <br />
+            <div className="examplePicContainer">
+                <img src={"/img/move3_1.png"} alt="missing" />
+                <img src={"/img/arrow.png"} className="arrow" alt="missing" />
+                <img src={"/img/move3_2.png"} alt="missing" />
+            </div>
+            <br />
+            <p><b>Case 3:</b> When playing into a square containing your own knight, that knight is upgraded
+            into a castle. The opposing player can't conquer squares that contain your castles. Likewise, you
+            can't place a knight on top of an opponents castle.</p>
         </section>
     )
 }
