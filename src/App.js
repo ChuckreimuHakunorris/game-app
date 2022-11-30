@@ -20,6 +20,7 @@ function App() {
         <Routes>
             <Route path="/" element={<Layout />}>
                 {/* public routes */}
+                <Route path="/" element={<Home />} />
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
                 <Route path="linkpage" element={<LinkPage />} />
@@ -28,7 +29,6 @@ function App() {
                 {/* protected routes */}
                 <Route element={<PersistLogin />}>
                     <Route element={<RequireAuth allowedRoles={[1000]} />}>
-                        <Route path="/" element={<Home />} />
                         <Route path="profile" element={<Profile />} />
                         <Route path="game" element={<Game />} />
                         <Route path="rooms" element={<RoomList />} />
